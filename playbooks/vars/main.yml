@@ -1,0 +1,4 @@
+---
+app_name: stv
+repo_url: "https://github.com/Carrigan/vote-service.git"
+app_port: 4000
