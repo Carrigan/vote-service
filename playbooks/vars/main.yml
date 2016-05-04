@@ -2,3 +2,7 @@
 app_name: stv
 repo_url: "https://github.com/Carrigan/vote-service.git"
 app_port: 4000
+enable_mail_alerts: False
+smtp_host: smtp.mailgun.org
+smtp_user: test
+smtp_password: test
