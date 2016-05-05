@@ -1,10 +1,11 @@
-defmodule Stv.Election do
+defmodule Stv.Candidate do
   use Stv.Web, :model
 
-  schema "elections" do
+  schema "candidates" do
     field :name, :string
-    field :status, :string
-    has_many :candidates, Stv.Candidate
+    field :winner, :boolean, default: false
+    belongs_to :election, Stv.Election
+
     timestamps
   end
 
@@ -20,7 +21,6 @@ defmodule Stv.Election do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> put_change(:status, "open")
-    |> cast_assoc(:candidates, required: true)
+    |> put_change(:winner, false)
   end
 end

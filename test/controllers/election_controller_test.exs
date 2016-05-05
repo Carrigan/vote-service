@@ -2,7 +2,7 @@ defmodule Stv.ElectionControllerTest do
   use Stv.ConnCase
 
   alias Stv.Election
-  @valid_attrs %{name: "some content"}
+  @valid_attrs %{name: "Beers", candidates: [%{name: "Guiness"}, %{name: "PBR"}]}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -19,7 +19,8 @@ defmodule Stv.ElectionControllerTest do
     conn = get conn, election_path(conn, :show, election)
     assert json_response(conn, 200)["data"] == %{"id" => election.id,
       "name" => election.name,
-      "status" => election.status}
+      "status" => election.status,
+      "candidates" => []}
   end
 
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do
@@ -31,7 +32,7 @@ defmodule Stv.ElectionControllerTest do
   test "creates and renders resource when data is valid", %{conn: conn} do
     conn = post conn, election_path(conn, :create), election: @valid_attrs
     assert json_response(conn, 201)["data"]["id"]
-    assert Repo.get_by(Election, @valid_attrs)
+    assert Repo.get_by(Election, Map.take(@valid_attrs, [:name]))
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
@@ -43,7 +44,7 @@ defmodule Stv.ElectionControllerTest do
     election = Repo.insert! %Election{}
     conn = put conn, election_path(conn, :update, election), election: @valid_attrs
     assert json_response(conn, 200)["data"]["id"]
-    assert Repo.get_by(Election, @valid_attrs)
+    assert Repo.get_by(Election, Map.take(@valid_attrs, [:name]))
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do

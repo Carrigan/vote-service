@@ -12,6 +12,7 @@ defmodule Stv.ElectionView do
   def render("election.json", %{election: election}) do
     %{id: election.id,
       name: election.name,
-      status: election.status}
+      status: election.status,
+      candidates: render_many(election.candidates, Stv.CandidateView, "candidate.json")}
   end
 end
