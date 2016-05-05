@@ -1,7 +1,7 @@
-defmodule Stv.ElectionControllerTest do
-  use Stv.ConnCase
+defmodule VoteService.ElectionControllerTest do
+  use VoteService.ConnCase
 
-  alias Stv.Election
+  alias VoteService.Election
   @valid_attrs %{name: "Beers", candidates: [%{name: "Guiness"}, %{name: "PBR"}]}
   @invalid_attrs %{}
 

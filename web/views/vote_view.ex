@@ -1,12 +1,12 @@
-defmodule Stv.VoteView do
-  use Stv.Web, :view
+defmodule VoteService.VoteView do
+  use VoteService.Web, :view
 
   def render("index.json", %{votes: votes}) do
-    %{data: render_many(votes, Stv.VoteView, "vote.json")}
+    %{data: render_many(votes, VoteService.VoteView, "vote.json")}
   end
 
   def render("show.json", %{vote: vote}) do
-    %{data: render_one(vote, Stv.VoteView, "vote.json")}
+    %{data: render_one(vote, VoteService.VoteView, "vote.json")}
   end
 
   def render("vote.json", %{vote: vote}) do

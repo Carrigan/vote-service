@@ -1,11 +1,11 @@
-defmodule Stv.Election do
-  use Stv.Web, :model
+defmodule VoteService.Election do
+  use VoteService.Web, :model
 
   schema "elections" do
     field :name, :string
     field :status, :string
-    has_many :candidates, Stv.Candidate
-    has_many :votes, Stv.Vote
+    has_many :candidates, VoteService.Candidate
+    has_many :votes, VoteService.Vote
     timestamps
   end
 

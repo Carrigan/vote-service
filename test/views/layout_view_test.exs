@@ -1,3 +1,3 @@
-defmodule Stv.LayoutViewTest do
-  use Stv.ConnCase, async: true
+defmodule VoteService.LayoutViewTest do
+  use VoteService.ConnCase, async: true
 end

@@ -1,10 +1,10 @@
-defmodule Stv.VoteEntry do
-  use Stv.Web, :model
+defmodule VoteService.VoteEntry do
+  use VoteService.Web, :model
 
   schema "vote_entries" do
     field :rank, :integer
-    belongs_to :vote, Stv.Vote
-    belongs_to :candidate, Stv.Candidate
+    belongs_to :vote, VoteService.Vote
+    belongs_to :candidate, VoteService.Candidate
 
     timestamps
   end

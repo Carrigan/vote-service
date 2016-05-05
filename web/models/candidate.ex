@@ -1,10 +1,10 @@
-defmodule Stv.Candidate do
-  use Stv.Web, :model
+defmodule VoteService.Candidate do
+  use VoteService.Web, :model
 
   schema "candidates" do
     field :name, :string
     field :winner, :boolean, default: false
-    belongs_to :election, Stv.Election
+    belongs_to :election, VoteService.Election
 
     timestamps
   end

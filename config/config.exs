@@ -6,12 +6,12 @@
 use Mix.Config
 
 # Configures the endpoint
-config :stv, Stv.Endpoint,
+config :vote_service, VoteService.Endpoint,
   url: [host: "localhost"],
   root: Path.dirname(__DIR__),
   secret_key_base: "sqbwg2VbSQzCrH+inzvU4SGAkTLT5d24CG/rsIYQa3MfQfshNoJKG1v6/NYzcBo7",
   render_errors: [accepts: ~w(html json)],
-  pubsub: [name: Stv.PubSub,
+  pubsub: [name: VoteService.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

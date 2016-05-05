@@ -28,6 +28,6 @@
 
 
 - name: "create database"
-  postgresql_db: name="stv_dev" encoding="UTF-8"
+  postgresql_db: name="vote_service_dev" encoding="UTF-8"
   sudo: yes
   sudo_user: postgres

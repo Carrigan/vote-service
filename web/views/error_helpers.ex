@@ -1,4 +1,4 @@
-defmodule Stv.ErrorHelpers do
+defmodule VoteService.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -26,10 +26,10 @@ defmodule Stv.ErrorHelpers do
     #
     #     dngettext "errors", "1 file", "%{count} files", count
     #
-    Gettext.dngettext(Stv.Gettext, "errors", msg, msg, opts[:count], opts)
+    Gettext.dngettext(VoteService.Gettext, "errors", msg, msg, opts[:count], opts)
   end
 
   def translate_error(msg) do
-    Gettext.dgettext(Stv.Gettext, "errors", msg)
+    Gettext.dgettext(VoteService.Gettext, "errors", msg)
   end
 end

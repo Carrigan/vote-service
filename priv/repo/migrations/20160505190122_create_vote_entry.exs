@@ -1,4 +1,4 @@
-defmodule Stv.Repo.Migrations.CreateVoteEntry do
+defmodule VoteService.Repo.Migrations.CreateVoteEntry do
   use Ecto.Migration
 
   def change do

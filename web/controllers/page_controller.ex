@@ -1,5 +1,5 @@
-defmodule Stv.PageController do
-  use Stv.Web, :controller
+defmodule VoteService.PageController do
+  use VoteService.Web, :controller
 
   def index(conn, _params) do
     render conn, "index.html"

@@ -1,8 +1,8 @@
-defmodule Stv.VoteTest do
-  use Stv.ModelCase
+defmodule VoteService.VoteTest do
+  use VoteService.ModelCase
 
-  alias Stv.Vote
-  alias Stv.Election
+  alias VoteService.Vote
+  alias VoteService.Election
   @valid_attrs %{}
   @invalid_attrs %{}
 

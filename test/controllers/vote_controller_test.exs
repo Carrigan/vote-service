@@ -1,8 +1,8 @@
-defmodule Stv.VoteControllerTest do
-  use Stv.ConnCase
+defmodule VoteService.VoteControllerTest do
+  use VoteService.ConnCase
 
-  alias Stv.Vote
-  alias Stv.Election
+  alias VoteService.Vote
+  alias VoteService.Election
   @invalid_attrs %{}
 
   setup %{conn: conn} do

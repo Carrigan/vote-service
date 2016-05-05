@@ -1,9 +1,9 @@
-defmodule Stv.Vote do
-  use Stv.Web, :model
+defmodule VoteService.Vote do
+  use VoteService.Web, :model
 
   schema "votes" do
-    belongs_to :election, Stv.Election
-    has_many :vote_entries, Stv.VoteEntry
+    belongs_to :election, VoteService.Election
+    has_many :vote_entries, VoteService.VoteEntry
     timestamps
   end
 

@@ -1,5 +1,5 @@
 ---
-app_name: stv
+app_name: vote_service
 repo_url: "https://github.com/Carrigan/vote-service.git"
 app_port: 4000
 enable_mail_alerts: False

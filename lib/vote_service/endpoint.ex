@@ -1,14 +1,14 @@
-defmodule Stv.Endpoint do
-  use Phoenix.Endpoint, otp_app: :stv
+defmodule VoteService.Endpoint do
+  use Phoenix.Endpoint, otp_app: :vote_service
 
-  socket "/socket", Stv.UserSocket
+  socket "/socket", VoteService.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest
   # when deploying your static files in production.
   plug Plug.Static,
-    at: "/", from: :stv, gzip: false,
+    at: "/", from: :vote_service, gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
@@ -32,8 +32,8 @@ defmodule Stv.Endpoint do
 
   plug Plug.Session,
     store: :cookie,
-    key: "_stv_key",
+    key: "_vote_service_key",
     signing_salt: "vvm2Bj3O"
 
-  plug Stv.Router
+  plug VoteService.Router
 end

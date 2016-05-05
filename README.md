@@ -1,4 +1,4 @@
-# Stv
+# VoteService
 
 To start your Phoenix app:
 

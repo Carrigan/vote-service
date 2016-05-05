@@ -1,11 +1,11 @@
-defmodule Stv.ChangesetView do
-  use Stv.Web, :view
+defmodule VoteService.ChangesetView do
+  use VoteService.Web, :view
 
   @doc """
   Traverses and translates changeset errors.
 
   See `Ecto.Changeset.traverse_errors/2` and
-  `Stv.ErrorHelpers.translate_error/1` for more details.
+  `VoteService.ErrorHelpers.translate_error/1` for more details.
   """
   def translate_errors(changeset) do
     Ecto.Changeset.traverse_errors(changeset, &translate_error/1)

@@ -1,5 +1,5 @@
-defmodule Stv.ErrorView do
-  use Stv.Web, :view
+defmodule VoteService.ErrorView do
+  use VoteService.Web, :view
 
   def render("404.html", _assigns) do
     "Page not found"

@@ -1,3 +1,3 @@
-defmodule Stv.PageViewTest do
-  use Stv.ConnCase, async: true
+defmodule VoteService.PageViewTest do
+  use VoteService.ConnCase, async: true
 end

@@ -1,3 +1,3 @@
-defmodule Stv.LayoutView do
-  use Stv.Web, :view
+defmodule VoteService.LayoutView do
+  use VoteService.Web, :view
 end

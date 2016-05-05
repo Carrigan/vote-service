@@ -1,7 +1,7 @@
-defmodule Stv.ElectionController do
-  use Stv.Web, :controller
+defmodule VoteService.ElectionController do
+  use VoteService.Web, :controller
 
-  alias Stv.Election
+  alias VoteService.Election
 
   plug :scrub_params, "election" when action in [:create, :update]
 
@@ -22,7 +22,7 @@ defmodule Stv.ElectionController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Stv.ChangesetView, "error.json", changeset: changeset)
+        |> render(VoteService.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
@@ -41,7 +41,7 @@ defmodule Stv.ElectionController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Stv.ChangesetView, "error.json", changeset: changeset)
+        |> render(VoteService.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

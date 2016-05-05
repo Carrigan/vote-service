@@ -1,5 +1,5 @@
-defmodule Stv.PageControllerTest do
-  use Stv.ConnCase
+defmodule VoteService.PageControllerTest do
+  use VoteService.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

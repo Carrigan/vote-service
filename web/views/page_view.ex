@@ -1,3 +1,3 @@
-defmodule Stv.PageView do
-  use Stv.Web, :view
+defmodule VoteService.PageView do
+  use VoteService.Web, :view
 end

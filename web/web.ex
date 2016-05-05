@@ -1,12 +1,12 @@
-defmodule Stv.Web do
+defmodule VoteService.Web do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
 
   This can be used in your application as:
 
-      use Stv.Web, :controller
-      use Stv.Web, :view
+      use VoteService.Web, :controller
+      use VoteService.Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -30,12 +30,12 @@ defmodule Stv.Web do
     quote do
       use Phoenix.Controller
 
-      alias Stv.Repo
+      alias VoteService.Repo
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
 
-      import Stv.Router.Helpers
-      import Stv.Gettext
+      import VoteService.Router.Helpers
+      import VoteService.Gettext
     end
   end
 
@@ -49,9 +49,9 @@ defmodule Stv.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Stv.Router.Helpers
-      import Stv.ErrorHelpers
-      import Stv.Gettext
+      import VoteService.Router.Helpers
+      import VoteService.ErrorHelpers
+      import VoteService.Gettext
     end
   end
 
@@ -65,10 +65,10 @@ defmodule Stv.Web do
     quote do
       use Phoenix.Channel
 
-      alias Stv.Repo
+      alias VoteService.Repo
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
-      import Stv.Gettext
+      import VoteService.Gettext
     end
   end
 
