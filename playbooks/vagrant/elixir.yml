@@ -1,0 +1,20 @@
+---
+- name: download erlang repo
+  get_url: url=https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb dest=/tmp/erlang.deb
+
+- name: add erlang repo
+  apt: deb=/tmp/erlang.deb
+
+- name: install erlang
+  apt: name=esl-erlang update_cache=yes
+
+- name: install elixir
+  apt: name=elixir
+
+- name: install hex
+  command: mix local.hex --force
+
+- name: install deps
+  command: mix deps.get --force
+  args:
+    chdir: /vagrant

@@ -1,0 +1,8 @@
+---
+- name: starting server
+  command: elixir --detached -S mix phoenix.server
+  environment:
+    HOST: 0.0.0.0
+    PORT: 4000
+  args:
+    chdir: /vagrant

@@ -1,0 +1,16 @@
+---
+- name: download node repo
+  get_url: url=https://deb.nodesource.com/setup_6.x dest=/tmp/node
+
+- name: source node
+  command: bash /tmp/node
+  become: yes
+  become_method: sudo
+
+- name: install node
+  apt: name=nodejs
+
+- name: npm install
+  command: npm install
+  args:
+    chdir: /vagrant

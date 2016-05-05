@@ -1,0 +1,13 @@
+---
+- name: apt-get update
+  apt: update_cache=yes
+
+- name: install system packages
+  apt: name="{{ item }}" state=present
+  with_items:
+    - build-essential
+    - curl
+    - wget
+    - python-pip
+    - python-dev
+
