@@ -1,13 +1,15 @@
-defmodule Stv.Vote do
+defmodule Stv.VoteEntry do
   use Stv.Web, :model
 
-  schema "votes" do
-    belongs_to :election, Stv.Election
-    has_many :vote_entries, Stv.VoteEntry
+  schema "vote_entries" do
+    field :rank, :integer
+    belongs_to :vote, Stv.Vote
+    belongs_to :candidate, Stv.Candidate
+
     timestamps
   end
 
-  @required_fields ~w()
+  @required_fields ~w(rank candidate_id)
   @optional_fields ~w()
 
   @doc """
@@ -16,10 +18,8 @@ defmodule Stv.Vote do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-
-  def create_changeset(election, params \\ :empty) do
-    build_assoc(election, :votes)
+  def changeset(model, params \\ :empty) do
+    model
     |> cast(params, @required_fields, @optional_fields)
-    |> cast_assoc(:vote_entries, required: true)
   end
 end

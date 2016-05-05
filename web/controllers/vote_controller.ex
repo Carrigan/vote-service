@@ -20,7 +20,7 @@ defmodule Stv.VoteController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", election_vote_path(conn, :show, election, vote))
-        |> render("show.json", vote: vote)
+        |> render("show.json", vote: Repo.preload(vote, :vote_entries))
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -29,7 +29,7 @@ defmodule Stv.VoteController do
   end
 
   def show(conn, %{"id" => id}) do
-    vote = Repo.get!(Vote, id)
+    vote = Repo.get!(Vote, id) |> Repo.preload(:vote_entries)
     render(conn, "show.json", vote: vote)
   end
 end
