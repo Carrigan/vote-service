@@ -7,11 +7,11 @@ defmodule Stv.VoteController do
   plug :scrub_params, "vote" when action in [:create, :update]
 
   def index(conn, %{"election_id" => election_id}) do
-    votes = Repo.all(from v in Vote, where: v.election_id == ^election_id)
+    votes = Repo.all(from v in Vote, where: v.election_id == ^election_id, preload: [:vote_entries])
     render(conn, "index.json", votes: votes)
   end
 
-  def create(conn, params = %{"election_id" => election_id, "vote" => vote_params}) do
+  def create(conn, %{"election_id" => election_id, "vote" => vote_params}) do
     election = Repo.get!(Election, election_id)
     changeset = Vote.create_changeset(election, vote_params)
 
