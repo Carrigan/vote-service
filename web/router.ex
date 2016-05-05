@@ -14,18 +14,14 @@ defmodule Stv.Router do
   end
 
   scope "/", Stv do
-    pipe_through :browser # Use the default browser stack
-
+    pipe_through :browser
     get "/", PageController, :index
   end
 
   scope "/api", Stv do
     pipe_through :api
-    resources "/elections", ElectionController, except: [:new, :edit]
+    resources "/elections", ElectionController, except: [:new, :edit] do
+      resources "/votes", VoteController, except: [:new, :edit, :update, :delete]
+    end
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", Stv do
-  #   pipe_through :api
-  # end
 end

@@ -5,6 +5,7 @@ defmodule Stv.Election do
     field :name, :string
     field :status, :string
     has_many :candidates, Stv.Candidate
+    has_many :votes, Stv.Vote
     timestamps
   end
 
