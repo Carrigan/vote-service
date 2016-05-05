@@ -19,6 +19,11 @@ defmodule Stv.Router do
     get "/", PageController, :index
   end
 
+  scope "/api", Stv do
+    pipe_through :api
+    resources "/elections", ElectionController, except: [:new, :edit]
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", Stv do
   #   pipe_through :api
