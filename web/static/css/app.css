@@ -10,6 +10,23 @@ body, form, ul, table {
   margin-bottom: 20px;
 }
 
+.drop-zone {
+  min-height: 20px;
+}
+
+.highlight-borders {
+  background-color: #DDD;
+}
+
+.directions {
+  font-size: 1.1em;
+  margin-bottom: 30px;
+}
+
+.button-row {
+  margin-top: 30px;
+}
+
 /* Phoenix flash messages */
 .alert:empty { display: none; }
 
