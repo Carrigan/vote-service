@@ -4,12 +4,13 @@ defmodule VoteService.Election do
   schema "elections" do
     field :name, :string
     field :status, :string
+    field :seats, :integer
     has_many :candidates, VoteService.Candidate
     has_many :votes, VoteService.Vote
     timestamps
   end
 
-  @required_fields ~w(name)
+  @required_fields ~w(name seats)
   @optional_fields ~w()
 
   @doc """

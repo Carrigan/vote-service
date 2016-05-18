@@ -2,7 +2,7 @@ defmodule VoteService.ElectionControllerTest do
   use VoteService.ConnCase
 
   alias VoteService.Election
-  @valid_attrs %{name: "Beers", candidates: [%{name: "Guiness"}, %{name: "PBR"}]}
+  @valid_attrs %{name: "Beers", seats: 1, candidates: [%{name: "Guiness"}, %{name: "PBR"}]}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
