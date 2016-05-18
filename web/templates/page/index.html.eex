@@ -11,9 +11,7 @@
   <div class="col-lg-5 col-lg-offset-1">
     <h4 class="text-center">Candidates</h4>
     <hr>
-    <ul id="candidates" class="list-group drop-zone connectedSortable">
-      <li class="list-group-item">Test</li>
-    </ul>
+    <ul id="candidates" class="list-group drop-zone connectedSortable"></ul>
   </div>
 
   <div class="col-lg-5">
@@ -41,4 +39,6 @@ $(function() {
     }
   }).disableSelection();
 });
+
+require("web/static/js/app").VoteApp.get_election(1);
 </script>

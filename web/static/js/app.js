@@ -19,3 +19,20 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+export var VoteApp = {
+  get_election: function(election) {
+    $.ajax({
+      type: "GET",
+      url: "/api/elections/" + election,
+      contentType: "application/json; charset=utf-8",
+      success: function(data) {
+        $.each(data.data.candidates, function(i, candidate) {
+          console.log(candidate);
+          $('#candidates').append("<li id=candidate_'" + candidate.id + "' class='list-group-item'>" + candidate.name + "</li>");
+        });
+        console.log(data);
+      }
+    })
+  },
+}
