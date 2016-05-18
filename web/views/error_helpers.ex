@@ -26,10 +26,10 @@ defmodule VoteService.ErrorHelpers do
     #
     #     dngettext "errors", "1 file", "%{count} files", count
     #
-    Gettext.dngettext(VoteService.Gettext, "errors", msg, msg, opts[:count], opts)
-  end
-
-  def translate_error(msg) do
-    Gettext.dgettext(VoteService.Gettext, "errors", msg)
+    if count = opts[:count] do
+      Gettext.dngettext(VoteService.Gettext, "errors", msg, msg, count, opts)
+    else
+      Gettext.dgettext(VoteService.Gettext, "errors", msg, opts)
+    end
   end
 end
