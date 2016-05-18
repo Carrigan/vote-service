@@ -3,7 +3,7 @@ defmodule VoteService.ElectionTest do
 
   alias VoteService.Election
 
-  @valid_attrs %{ name: "some content", seats: 1 }
+  @valid_attrs %{ name: "some content", seats: 1, candidates: [%{name: "some candidate"}] }
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

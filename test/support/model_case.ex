@@ -25,12 +25,8 @@ defmodule VoteService.ModelCase do
     end
   end
 
-  setup tags do
-    unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(VoteService.Repo, [])
-    end
-
-    :ok
+  setup do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(VoteService.Repo)
   end
 
   @doc """

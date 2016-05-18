@@ -3,11 +3,11 @@ defmodule VoteService.VoteTest do
 
   alias VoteService.Vote
   alias VoteService.Election
-  @valid_attrs %{}
+  @valid_attrs %{vote_entries: [%{candidate_id: 1, rank: 0}]}
   @invalid_attrs %{}
 
   setup do
-    {:ok, election: Repo.insert!(%Election{}, name: "Best Beer")}
+    {:ok, election: Repo.insert!(%Election{name: "Best Beer"})}
   end
 
   test "changeset with valid attributes", %{election: election} do

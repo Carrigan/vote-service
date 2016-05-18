@@ -23,7 +23,6 @@ election = Repo.insert! Election.changeset(
     %{ name: "Yogurt" }]})
 
 candidate_ids = Enum.map(election.candidates, fn(candidate) -> candidate.id end)
-IO.inspect candidate_ids
 
 # Create several votes for this election
 Enum.each(
