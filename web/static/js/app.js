@@ -30,4 +30,17 @@ export var VoteApp = {
       error: failure
     })
   },
+
+  make_election: function(candidates, name, seats, success, failure) {
+    var candidate_objects = $.map(candidates, function(candidate) { return {name: candidate}; })
+    $.ajax({
+      type: "POST",
+      url: "/api/elections/",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({election: {candidates: candidate_objects, name: name, seats: seats}}),
+      dataType: "json",
+      success: success,
+      error: failure
+    })
+  },
 }

@@ -27,6 +27,7 @@
 </div>
 
 <script>
+var vote_id = <%= @vote_id %>;
 $(function() {
   $( "#candidates, #ballot" ).sortable({
     connectWith: ".connectedSortable",
@@ -50,5 +51,5 @@ var failure_handler = function(data) {
   console.log("Replace this with a 404 please!");
 }
 
-require("web/static/js/app").VoteApp.get_election(1, success_handler, failure_handler);
+require("web/static/js/app").VoteApp.get_election(vote_id, success_handler, failure_handler);
 </script>

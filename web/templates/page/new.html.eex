@@ -1,1 +1,68 @@
-<h1>New Election Form Here</h1>
+<div id="loading" class="hidden">
+  <img src="http://reactiongifs.me/wp-content/uploads/2013/08/at-work-cookie-monster.gif">
+</div>
+
+<div id="create_new">
+  <h3>Create a new election</h3>
+  <p>To create a new election, create candidates and then click the Create Election button.</p>
+
+  <div class="form-group">
+    <label for="usr">Election Name</label>
+    <input type="text" class="form-control" id="election_name">
+  </div>
+
+  <div class="form-group">
+    <label for="usr">Seat Count</label>
+    <input type="text" class="form-control" id="seat_count">
+  </div>
+
+  <h4>Candidates</h4>
+  <div id="inputs_div" class="space-bottom"></div>
+  <button id="more_candidates" class="btn btn-primary">Add Another Candidate</button>
+  <button id='new_button' class="btn btn-primary">Create Election</button>
+</div>
+
+<div id="election_created" class="hidden">
+  <h3>Success!</h3>
+  <p>Your election has been created and can be found at the following link: <a id="election-link"></a>.
+  <h3>Finish this election</h3>
+  <p>In order to finish this election, simply click on the following link and we will tabulate and display your
+     election's results. </p>
+</div>
+
+<script>
+var app = require("web/static/js/app").VoteApp;
+
+var success_handler = function(data) {
+  $('#loading').addClass('hidden');
+  $('#election_created').removeClass('hidden');
+}
+
+var failure_handler = function(data) {
+  $('#loading').addClass('hidden');
+  $('#create_new').removeClass('hidden');
+}
+
+var create_new_candidate = function() {
+  var container = $('#inputs_div');
+  container.append("<input type='text' class='form-control space-bottom'>");
+}
+
+create_new_candidate();
+
+$('#more_candidates').click(function() {
+  create_new_candidate();
+});
+
+$('#new_button').click(function() {
+  $('#create_new').addClass('hidden');
+  $('#election_created').addClass('hidden');
+  $('#loading').removeClass('hidden');
+
+  var name = $('#election_name').val();
+  var seats = $('#seat_count').val();
+  var candidates = $.map($('#inputs_div :input'), function(input) { return $(input).val() });
+  app.make_election(candidates, name, seats, success_handler, failure_handler);
+});
+
+</script>
