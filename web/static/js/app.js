@@ -21,18 +21,13 @@ import "phoenix_html"
 // import socket from "./socket"
 
 export var VoteApp = {
-  get_election: function(election) {
+  get_election: function(election, success, failure) {
     $.ajax({
       type: "GET",
       url: "/api/elections/" + election,
       contentType: "application/json; charset=utf-8",
-      success: function(data) {
-        $.each(data.data.candidates, function(i, candidate) {
-          console.log(candidate);
-          $('#candidates').append("<li id=candidate_'" + candidate.id + "' class='list-group-item'>" + candidate.name + "</li>");
-        });
-        console.log(data);
-      }
+      success: success,
+      error: failure
     })
   },
 }

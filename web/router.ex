@@ -16,6 +16,8 @@ defmodule VoteService.Router do
   scope "/", VoteService do
     pipe_through :browser
     get "/", PageController, :index
+    get "/new", PageController, :new_election
+    get "/vote/:id", PageController, :vote
   end
 
   scope "/api", VoteService do
