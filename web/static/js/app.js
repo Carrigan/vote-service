@@ -43,4 +43,20 @@ export var VoteApp = {
       error: failure
     })
   },
+
+  cast_vote: function(election_id, candidate_ids, success, failure) {
+    var entries = $.map(candidate_ids, function(c_id, i) {
+      return { candidate_id: c_id, rank: i };
+    });
+
+    $.ajax({
+      type: "POST",
+      url: "/api/elections/" + election_id + "/votes",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({vote: {vote_entries: entries}}),
+      dataType: "json",
+      success: success,
+      error: failure
+    })
+  }
 }
