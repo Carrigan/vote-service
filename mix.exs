@@ -37,7 +37,8 @@ defmodule VoteService.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
-     {:exrm, "~> 0.18.1"}]
+     {:exrm, "~> 0.18.1"},
+     {:stv, git: "git://github.com/carrigan/elixir-stv.git", app: false}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
