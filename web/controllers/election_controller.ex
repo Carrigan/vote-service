@@ -6,7 +6,7 @@ defmodule VoteService.ElectionController do
   plug :scrub_params, "election" when action in [:create, :update]
 
   def index(conn, _params) do
-    elections = Repo.all(Election) |> Repo.preload(:candidates)
+    elections = Election.open_elections |> Repo.preload(:candidates)
     render(conn, "index.json", elections: elections)
   end
 
@@ -53,5 +53,10 @@ defmodule VoteService.ElectionController do
     Repo.delete!(election)
 
     send_resp(conn, :no_content, "")
+  end
+
+  def close_poll(conn, %{"id" => _id}) do
+    elections = Repo.all(Election) |> Repo.preload(:candidates)
+    render(conn, "index.json", elections: elections)
   end
 end

@@ -1,5 +1,6 @@
 defmodule VoteService.Election do
   use VoteService.Web, :model
+  import Ecto.Query, only: [from: 2]
 
   schema "elections" do
     field :name, :string
@@ -24,5 +25,10 @@ defmodule VoteService.Election do
     |> cast(params, @required_fields, @optional_fields)
     |> put_change(:status, "open")
     |> cast_assoc(:candidates, required: true)
+  end
+
+  def open_elections() do
+    query = from e in __MODULE__, where: e.status == "open"
+    VoteService.Repo.all(query)
   end
 end

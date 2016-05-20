@@ -74,5 +74,4 @@ $('#vote-button').click(function() {
   app.cast_vote(election_id, candidates, vote_success_handler, vote_failure_handler);
 });
 
-
 </script>
