@@ -31,4 +31,8 @@ defmodule VoteService.Election do
     query = from e in __MODULE__, where: e.status == "open"
     VoteService.Repo.all(query)
   end
+
+  def close(model) do
+    change(model) |> put_change(:status, "closed")
+  end
 end

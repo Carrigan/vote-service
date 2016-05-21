@@ -23,4 +23,8 @@ defmodule VoteService.Candidate do
     |> cast(params, @required_fields, @optional_fields)
     |> put_change(:winner, false)
   end
+
+  def elect(model) do
+    change(model) |> put_change(:winner, true)
+  end
 end
