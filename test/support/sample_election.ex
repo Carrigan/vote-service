@@ -3,10 +3,10 @@ defmodule VoteService.SampleElection do
   alias VoteService.Vote
   alias VoteService.Repo
 
-  def build() do
+  def build(count) do
     election = build_election
     {[winner], rest} = split_candidates election.candidates
-    build_votes!(election, winner, rest, 10)
+    build_votes!(election, winner, rest, count)
     { election, winner }
   end
 

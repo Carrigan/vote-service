@@ -4,7 +4,7 @@ defmodule VoteService.ElectionServiceTest do
   alias VoteService.Election
 
   setup do
-    { election, winner } = VoteService.SampleElection.build
+    { election, winner } = VoteService.SampleElection.build(10)
     { :ok, election: election, expected_winner: winner }
   end
 

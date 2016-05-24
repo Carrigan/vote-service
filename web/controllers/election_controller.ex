@@ -55,8 +55,8 @@ defmodule VoteService.ElectionController do
     send_resp(conn, :no_content, "")
   end
 
-  def close_poll(conn, %{"id" => _id}) do
-    elections = Repo.all(Election) |> Repo.preload(:candidates)
-    render(conn, "index.json", elections: elections)
+  def close_poll(conn, params = %{"id" => id}) do
+    VoteService.ElectionService.run(id)
+    show(conn, params)
   end
 end
