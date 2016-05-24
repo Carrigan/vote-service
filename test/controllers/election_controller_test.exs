@@ -17,10 +17,12 @@ defmodule VoteService.ElectionControllerTest do
   test "shows chosen resource", %{conn: conn} do
     election = Repo.insert! %Election{}
     conn = get conn, election_path(conn, :show, election)
-    assert json_response(conn, 200)["data"] == %{"id" => election.id,
+    assert json_response(conn, 200)["data"] == %{
+      "id" => election.id,
       "name" => election.name,
       "status" => election.status,
-      "candidates" => []}
+      "candidates" => [],
+      "close_url" => nil }
   end
 
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do
