@@ -6,6 +6,7 @@ defmodule VoteService.Election do
     field :name, :string
     field :status, :string
     field :seats, :integer
+    field :close_url, :string
     has_many :candidates, VoteService.Candidate
     has_many :votes, VoteService.Vote
     timestamps

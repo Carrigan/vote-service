@@ -14,6 +14,8 @@ config :vote_service, VoteService.Endpoint,
   pubsub: [name: VoteService.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :vote_service, ecto_repos: [VoteService.Repo]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
