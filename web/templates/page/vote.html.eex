@@ -28,11 +28,6 @@
   </div>
 </div>
 
-<div id="done-box" class="hidden">
-  <h3>Thanks!</h3>
-  <p>Your vote has been recorded.</p>
-</div>
-
 <script>
 var app = require("web/static/js/app").VoteApp;
 var election_id = <%= @vote_id %>;
@@ -61,8 +56,7 @@ var failure_handler = function(data) {
 }
 
 var vote_success_handler = function() {
-  $('#done-box').removeClass('hidden');
-  $('#vote-box').addClass('hidden');
+  window.location.href = "/results/" + election_id + "?voted=true";
 }
 
 var vote_failure_handler = function() { }

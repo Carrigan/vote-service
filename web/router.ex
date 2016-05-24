@@ -18,6 +18,7 @@ defmodule VoteService.Router do
     get "/", PageController, :index
     get "/new", PageController, :new_election
     get "/vote/:id", PageController, :vote
+    get "/results/:id", PageController, :results
   end
 
   scope "/api", VoteService do

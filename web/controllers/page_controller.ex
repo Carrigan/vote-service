@@ -12,4 +12,8 @@ defmodule VoteService.PageController do
   def vote(conn, %{"id" => id}) do
     render conn, "vote.html", vote_id: id
   end
+
+  def results(conn, %{"id" => id}) do
+    render conn, "results.html", election_id: id
+  end
 end
