@@ -26,16 +26,38 @@
   <h3>Success!</h3>
   <p>Your election has been created and can be found at the following link: <a id="election-link"></a>.
   <h3>Finish this election</h3>
-  <p>In order to finish this election, simply click on the following link and we will tabulate and display your
-     election's results. </p>
+  <p>In order to finish this election, simply click on the following button and we will tabulate and display your
+     election's results.</p>
+  <button id='close-button' class="btn btn-primary">Close Election</button>
 </div>
 
 <script>
 var app = require("web/static/js/app").VoteApp;
+var close_link;
+var election_id;
+
+var close_success = function() {
+  window.location.href = "/results/" + election_id;
+}
+
+var close_failure = function() {
+  console.log("Add an error handler here please!");
+}
+
+$('#close-button').click(function() {
+  app.close_election(close_link, close_success, close_failure);
+});
 
 var success_handler = function(data) {
   $('#loading').addClass('hidden');
   $('#election_created').removeClass('hidden');
+
+  election_id = data.data.id;
+  close_link = data.data.close_url;
+  var election_link = '/vote/' + data.data.id;
+
+  $('#election-link').attr('href', election_link);
+  $('#election-link').text(election_link);
 }
 
 var failure_handler = function(data) {

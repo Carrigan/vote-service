@@ -23,7 +23,7 @@ defmodule VoteService.Router do
 
   scope "/api", VoteService do
     pipe_through :api
-    get "/close_poll/:id", ElectionController, :close_poll
+    get "/close_poll/:url", ElectionController, :close_poll
     resources "/elections", ElectionController, except: [:new, :edit] do
       resources "/votes", VoteController, except: [:new, :edit, :update, :delete]
     end

@@ -24,8 +24,13 @@ defmodule VoteService.Election do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> put_change(:close_url, random_string(32))
     |> put_change(:status, "open")
     |> cast_assoc(:candidates, required: true)
+  end
+
+  def random_string(length) do
+    :crypto.strong_rand_bytes(length) |> Base.url_encode64() |> binary_part(0, length)
   end
 
   def open_elections() do

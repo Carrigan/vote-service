@@ -58,5 +58,15 @@ export var VoteApp = {
       success: success,
       error: failure
     })
+  },
+
+  close_election: function(election_close_url, success, failure) {
+    $.ajax({
+      type: "GET",
+      url: "/api/close_poll/" + election_close_url,
+      contentType: "application/json; charset=utf-8",
+      success: success,
+      error: failure
+    });
   }
 }

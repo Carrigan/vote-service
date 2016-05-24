@@ -17,6 +17,12 @@ defmodule VoteService.ElectionTest do
     assert status == "open"
   end
 
+  test "changeset has a strong close_url link" do
+    changeset = Election.changeset(%Election{}, @valid_attrs)
+    { :ok, url } = Map.fetch(changeset.changes, :close_url)
+    assert url != nil
+  end
+
   test "changeset with invalid attributes" do
     changeset = Election.changeset(%Election{}, @invalid_attrs)
     refute changeset.valid?

@@ -55,8 +55,9 @@ defmodule VoteService.ElectionController do
     send_resp(conn, :no_content, "")
   end
 
-  def close_poll(conn, params = %{"id" => id}) do
-    VoteService.ElectionService.run(id)
-    show(conn, params)
+  def close_poll(conn, params = %{ "url" => url }) do
+    election = Repo.get_by!(Election, close_url: url)
+    VoteService.ElectionService.run(election.id)
+    show(conn, Map.merge(params, %{ "id" => election.id }))
   end
 end

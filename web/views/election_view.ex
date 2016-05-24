@@ -13,6 +13,7 @@ defmodule VoteService.ElectionView do
     %{id: election.id,
       name: election.name,
       status: election.status,
-      candidates: render_many(election.candidates, VoteService.CandidateView, "candidate.json")}
+      candidates: render_many(election.candidates, VoteService.CandidateView, "candidate.json"),
+      close_url: election.close_url }
   end
 end
