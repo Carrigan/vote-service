@@ -19,7 +19,7 @@ defmodule VoteService.Mixfile do
   def application do
     [mod: {VoteService, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :stv]]
   end
 
   # Specifies which paths to compile per environment.
@@ -37,8 +37,8 @@ defmodule VoteService.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
-     {:exrm, "~> 0.18.1"},
-     {:stv, git: "git://github.com/carrigan/elixir-stv.git", app: false}]
+     {:exrm, "~> 1.0.5"},
+     {:stv, "~> 0.0.2", git: "git://github.com/carrigan/elixir-stv.git", app: false}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
