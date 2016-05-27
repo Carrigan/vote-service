@@ -16,13 +16,14 @@
   </head>
 
   <body>
-    <div class="container">
-      <header class="header">
-        <div class="container">
-          <h3 class="pull-right">vote service</h3>
-        </div>
-      </header>
+    <header class="header">
+      <div class="spacer"></div>
+      <div class="container">
+        <h3 class="pull-right header-text">open ballot</h3>
+      </div>
+    </header>
 
+    <div class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 

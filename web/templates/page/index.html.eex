@@ -1,9 +1,8 @@
 <div class="row">
   <div class="col-md-12">
-    <h1>Welcome to the Vote Service Frontend</h1>
-    <h4 class="tagline">Vote service is a JSON API for creating, managing, and voting in elections using the
+    <h3 class="tagline">Open Ballot is a JSON API for creating, managing, and voting in elections using the
       <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">single transferable vote</a>
-      algorithm.</h4>
+      algorithm.</h3>
     <p>
       Have somewhere that you would like to apply democracy? You can get started by clicking the
       "New Election" link below to create a public election for free. Once created, you will be
