@@ -1,1 +1,61 @@
-<h1>List of open elections here.</h1>
+<div class="row">
+  <div class="col-md-12">
+    <h1>Welcome to the Vote Service Frontend</h1>
+    <h4 class="tagline">Vote service is a JSON API for creating, managing, and voting in elections using the
+      <a href="https://en.wikipedia.org/wiki/Single_transferable_vote">single transferable vote</a>
+      algorithm.</h4>
+    <p>
+      Have somewhere that you would like to apply democracy? You can get started by clicking the
+      "New Election" link below to create a public election for free. Once created, you will be
+      given a link that you can send to people you would like to vote in your election. When you
+      are ready, you will be given a link that you can click to end the election and distribute the
+      results.
+    </p>
+  </div>
+
+  <div class="col-md-4 col-md-offset-4">
+    <a href="/new" class="btn btn-block btn-primary">New Election</a>
+  </div><div class="col-md-4"></div>
+
+  <div class="col-md-12">
+    <h3>Single Transferable Vote</h3>
+    <p>
+      Single transferable vote is a method of conducting an election that is used many places around
+      the world, including and even several places in the US. To learn more about the underlying
+      algorithm, you can watch the video below.
+    </p>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/l8XOZJkozfI" frameborder="0" allowfullscreen></iframe>
+
+    <h3>API Documenation</h3>
+    <p>Documentation for the API is coming soon.</p>
+  </div>
+
+  <div class="col-md-12 hidden" id='election-box'>
+    <h3>Elections Happening Now</h3>
+
+    <table class="table" id="current-elections">
+      <tr><th>Election Name</th><th># Seats</th><th>Created</th></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+var app = require("web/static/js/app").VoteApp;
+
+var success_handler = function(data) {
+  if(data.data.length > 0) {
+    $('#election-box').removeClass('hidden');
+    $.each(data.data, function(i, entry) {
+      $('#current-elections').append("<tr><td><a href='/vote/" + entry.id +"'>" + entry.name +
+        "</a></td><td>" + entry.seat_count+ "</td><td>" + entry.created_at + "</td></tr>");
+    });
+  }
+}
+
+var failure_handler = function(data) {
+  console.log("Handle this.");
+}
+
+app.get_elections(success_handler, failure_handler);
+</script>

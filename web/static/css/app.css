@@ -10,6 +10,12 @@ body, form, ul, table {
   margin-bottom: 20px;
 }
 
+.tagline {
+  line-height: 150%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .space-bottom {
   margin-bottom: 20px;
 }

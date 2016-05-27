@@ -68,5 +68,15 @@ export var VoteApp = {
       success: success,
       error: failure
     });
+  },
+
+  get_elections: function(success, failure) {
+    $.ajax({
+      type: "GET",
+      url: "/api/elections",
+      contentType: "application/json; charset=utf-8",
+      success: success,
+      error: failure
+    });
   }
 }
