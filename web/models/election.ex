@@ -1,6 +1,7 @@
 defmodule VoteService.Election do
   use VoteService.Web, :model
   import Ecto.Query, only: [from: 2]
+  alias VoteService.Repo
 
   schema "elections" do
     field :name, :string
@@ -35,10 +36,16 @@ defmodule VoteService.Election do
 
   def open_elections() do
     query = from e in __MODULE__, where: e.status == "open"
-    VoteService.Repo.all(query)
+    Repo.all(query)
   end
 
   def close(model) do
     change(model) |> put_change(:status, "closed")
+  end
+
+  def vote_count(model) do
+    query = from v in VoteService.Vote, select: count(v.id), where: v.election_id == ^model.id
+    [count | _] = Repo.all(query)
+    count
   end
 end

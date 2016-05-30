@@ -27,4 +27,9 @@ defmodule VoteService.ElectionTest do
     changeset = Election.changeset(%Election{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  test "vote_count returns the proper number of votes on an election" do
+    { election, _ } = VoteService.SampleElection.build(5)
+    assert Election.vote_count(election) == 5
+  end
 end

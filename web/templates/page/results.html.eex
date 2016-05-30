@@ -10,6 +10,8 @@
       <p class="directions">
         This election is still going. The results will be displayed here when it has finished.
       </p>
+
+      <h4>Current vote count: <span id="vote_count"></span></h4>
     </div>
   </div>
 </div>
@@ -57,6 +59,7 @@ var request_results = function() {
 
 var success_handler = function(data) {
   if(data.data.status == "open") {
+    $('#vote_count').text(data.data.vote_count)
     setTimeout(request_results, 5000);
     return;
   }
