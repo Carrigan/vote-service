@@ -7,6 +7,13 @@
         <hr>
       </div>
 
+      <div id="voter-fraud" class="hidden">
+        <h3>Looks like you already voted!</h3>
+        <p>Our records show that you have already voted in this election. We routed you to the
+           results page instead so you could follow along.</p>
+        <hr>
+      </div>
+
       <p class="directions">
         This election is still going. The results will be displayed here when it has finished.
       </p>
@@ -51,6 +58,10 @@ var query_string = function () {
 
 if(query_string.voted) {
   $('#thanks-for-voting').removeClass('hidden');
+}
+
+if(query_string.fraud) {
+  $('#voter-fraud').removeClass('hidden');
 }
 
 var request_results = function() {

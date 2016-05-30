@@ -32,6 +32,10 @@
 var app = require("web/static/js/app").VoteApp;
 var election_id = <%= @vote_id %>;
 
+if($.cookie('election_' + election_id)) {
+  window.location.href = "/results/" + election_id + "?fraud=true";
+}
+
 $(function() {
   $( "#candidates, #ballot" ).sortable({
     connectWith: ".connectedSortable",
@@ -65,6 +69,7 @@ app.get_election(election_id, success_handler, failure_handler);
 
 $('#vote-button').click(function() {
   var candidates = $.map($('#ballot li'), function(li) { return $(li).attr('id').split('_')[1]; });
+  $.cookie('election_' + election_id, true);
   app.cast_vote(election_id, candidates, vote_success_handler, vote_failure_handler);
 });
 
