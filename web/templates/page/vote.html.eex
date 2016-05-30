@@ -22,6 +22,9 @@
     </div>
   </div>
 
+  <div id="error-box" class="hidden">
+    <p>You must select at least one candidate to vote!</p>
+  </div>
 
   <div class="row button-row">
     <div class="col-lg-4 col-lg-offset-4"><button id="vote-button" class="btn btn-primary btn-block">Vote</button></div>
@@ -69,6 +72,12 @@ app.get_election(election_id, success_handler, failure_handler);
 
 $('#vote-button').click(function() {
   var candidates = $.map($('#ballot li'), function(li) { return $(li).attr('id').split('_')[1]; });
+
+  if(candidates.length == 0) {
+    $('#error-box').removeClass('hidden');
+    return;
+  }
+
   $.cookie('election_' + election_id, true);
   app.cast_vote(election_id, candidates, vote_success_handler, vote_failure_handler);
 });
