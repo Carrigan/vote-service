@@ -20,6 +20,9 @@ import "phoenix_html"
 
 // import socket from "./socket"
 
+var elmDiv = document.getElementById('elm-main')
+var elmApp = Elm.Main.embed(elmDiv);
+
 export var VoteApp = {
   get_election: function(election, success, failure) {
     $.ajax({
