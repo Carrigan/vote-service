@@ -8026,35 +8026,27 @@ var _evancz$elm_http$Http$post = F3(
 			A2(_evancz$elm_http$Http$send, _evancz$elm_http$Http$defaultSettings, request));
 	});
 
-var _user$project$Main$myStyle = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'width', _1: '100%'},
-			{ctor: '_Tuple2', _0: 'height', _1: '40px'},
-			{ctor: '_Tuple2', _0: 'padding', _1: '10px 0'},
-			{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
-			{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
-		]));
-var _user$project$Main$buttonStyle = _elm_lang$html$Html_Attributes$style(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'margin', _1: '10px'},
-			{ctor: '_Tuple2', _0: 'padding', _1: '10px'},
-			{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
-			{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
-			{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
-		]));
-var _user$project$Main$onEnter = F2(
-	function (fail, success) {
-		var tagger = function (code) {
-			return _elm_lang$core$Native_Utils.eq(code, 13) ? success : fail;
-		};
-		return A2(
-			_elm_lang$html$Html_Events$on,
-			'keyup',
-			A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$keyCode));
+var _user$project$Election_Messages$CreateElectionFailure = function (a) {
+	return {ctor: 'CreateElectionFailure', _0: a};
+};
+var _user$project$Election_Messages$CreateElectionSuccess = function (a) {
+	return {ctor: 'CreateElectionSuccess', _0: a};
+};
+var _user$project$Election_Messages$CreateElection = {ctor: 'CreateElection'};
+var _user$project$Election_Messages$AddCandidate = {ctor: 'AddCandidate'};
+var _user$project$Election_Messages$EditCandidate = F2(
+	function (a, b) {
+		return {ctor: 'EditCandidate', _0: a, _1: b};
 	});
-var _user$project$Main$electionPost = function (election) {
+var _user$project$Election_Messages$SeatCount = function (a) {
+	return {ctor: 'SeatCount', _0: a};
+};
+var _user$project$Election_Messages$ElectionName = function (a) {
+	return {ctor: 'ElectionName', _0: a};
+};
+var _user$project$Election_Messages$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Election_Commands$electionPost = function (election) {
 	var candidateSerializer = function (candidate) {
 		return _elm_lang$core$Json_Encode$object(
 			_elm_lang$core$Native_List.fromArray(
@@ -8108,129 +8100,43 @@ var _user$project$Main$electionPost = function (election) {
 			body: _evancz$elm_http$Http$string(body)
 		});
 };
-var _user$project$Main$newCandidate = function (id) {
-	return {name: '', id: id};
-};
-var _user$project$Main$newElection = {
-	candidates: _elm_lang$core$Native_List.fromArray(
-		[
-			_user$project$Main$newCandidate(0)
-		]),
-	name: '',
-	seats: 1,
-	currentId: 0
-};
-var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$newElection, _1: _elm_lang$core$Platform_Cmd$none};
-var _user$project$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
-var _user$project$Main$Candidate = F2(
-	function (a, b) {
-		return {name: a, id: b};
-	});
-var _user$project$Main$Election = F4(
-	function (a, b, c, d) {
-		return {candidates: a, name: b, seats: c, currentId: d};
-	});
-var _user$project$Main$CreateElectionFailure = function (a) {
-	return {ctor: 'CreateElectionFailure', _0: a};
-};
-var _user$project$Main$CreateElectionSuccess = function (a) {
-	return {ctor: 'CreateElectionSuccess', _0: a};
-};
-var _user$project$Main$createElection = function (election) {
+var _user$project$Election_Commands$createElection = function (election) {
 	return A3(
 		_elm_lang$core$Task$perform,
-		_user$project$Main$CreateElectionFailure,
-		_user$project$Main$CreateElectionSuccess,
-		_user$project$Main$electionPost(election));
+		_user$project$Election_Messages$CreateElectionFailure,
+		_user$project$Election_Messages$CreateElectionSuccess,
+		_user$project$Election_Commands$electionPost(election));
 };
-var _user$project$Main$update = F2(
-	function (msg, election) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'NoOp':
-				return {ctor: '_Tuple2', _0: election, _1: _elm_lang$core$Platform_Cmd$none};
-			case 'ElectionName':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						election,
-						{name: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'SeatCount':
-				var _p1 = _elm_lang$core$String$toInt(_p0._0);
-				if (_p1.ctor === 'Err') {
-					return {ctor: '_Tuple2', _0: election, _1: _elm_lang$core$Platform_Cmd$none};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							election,
-							{seats: _p1._0}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'EditCandidate':
-				var updateCandidate = function (c) {
-					return _elm_lang$core$Native_Utils.eq(c.id, _p0._0) ? _elm_lang$core$Native_Utils.update(
-						c,
-						{name: _p0._1}) : c;
-				};
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						election,
-						{
-							candidates: A2(_elm_lang$core$List$map, updateCandidate, election.candidates)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'AddCandidate':
-				var newId = election.currentId + 1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						election,
-						{
-							candidates: A2(
-								_elm_lang$core$List$append,
-								election.candidates,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										_user$project$Main$newCandidate(newId)
-									])),
-							currentId: newId
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'CreateElection':
-				return {
-					ctor: '_Tuple2',
-					_0: election,
-					_1: _user$project$Main$createElection(election)
-				};
-			case 'CreateElectionSuccess':
-				return {ctor: '_Tuple2', _0: election, _1: _elm_lang$core$Platform_Cmd$none};
-			default:
-				return {ctor: '_Tuple2', _0: election, _1: _elm_lang$core$Platform_Cmd$none};
-		}
+
+var _user$project$Election_Create$myStyle = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'width', _1: '100%'},
+			{ctor: '_Tuple2', _0: 'height', _1: '40px'},
+			{ctor: '_Tuple2', _0: 'padding', _1: '10px 0'},
+			{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+			{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+		]));
+var _user$project$Election_Create$buttonStyle = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'margin', _1: '10px'},
+			{ctor: '_Tuple2', _0: 'padding', _1: '10px'},
+			{ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+			{ctor: '_Tuple2', _0: 'background-color', _1: '#DDD'},
+			{ctor: '_Tuple2', _0: 'text-align', _1: 'center'}
+		]));
+var _user$project$Election_Create$onEnter = F2(
+	function (fail, success) {
+		var tagger = function (code) {
+			return _elm_lang$core$Native_Utils.eq(code, 13) ? success : fail;
+		};
+		return A2(
+			_elm_lang$html$Html_Events$on,
+			'keyup',
+			A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$keyCode));
 	});
-var _user$project$Main$CreateElection = {ctor: 'CreateElection'};
-var _user$project$Main$AddCandidate = {ctor: 'AddCandidate'};
-var _user$project$Main$EditCandidate = F2(
-	function (a, b) {
-		return {ctor: 'EditCandidate', _0: a, _1: b};
-	});
-var _user$project$Main$SeatCount = function (a) {
-	return {ctor: 'SeatCount', _0: a};
-};
-var _user$project$Main$ElectionName = function (a) {
-	return {ctor: 'ElectionName', _0: a};
-};
-var _user$project$Main$NoOp = {ctor: 'NoOp'};
-var _user$project$Main$renderCandidate = function (candidate) {
+var _user$project$Election_Create$renderCandidate = function (candidate) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8242,16 +8148,16 @@ var _user$project$Main$renderCandidate = function (candidate) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html_Attributes$placeholder('New Candidate'),
-						_user$project$Main$myStyle,
+						_user$project$Election_Create$myStyle,
 						_elm_lang$html$Html_Events$onInput(
-						_user$project$Main$EditCandidate(candidate.id)),
-						A2(_user$project$Main$onEnter, _user$project$Main$NoOp, _user$project$Main$AddCandidate)
+						_user$project$Election_Messages$EditCandidate(candidate.id)),
+						A2(_user$project$Election_Create$onEnter, _user$project$Election_Messages$NoOp, _user$project$Election_Messages$AddCandidate)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[]))
 			]));
 };
-var _user$project$Main$view = function (election) {
+var _user$project$Election_Create$view = function (election) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8263,8 +8169,8 @@ var _user$project$Main$view = function (election) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html_Attributes$placeholder('Election Name'),
-						_elm_lang$html$Html_Events$onInput(_user$project$Main$ElectionName),
-						_user$project$Main$myStyle
+						_elm_lang$html$Html_Events$onInput(_user$project$Election_Messages$ElectionName),
+						_user$project$Election_Create$myStyle
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
@@ -8273,8 +8179,8 @@ var _user$project$Main$view = function (election) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html_Attributes$placeholder('Seat Count'),
-						_elm_lang$html$Html_Events$onInput(_user$project$Main$SeatCount),
-						_user$project$Main$myStyle
+						_elm_lang$html$Html_Events$onInput(_user$project$Election_Messages$SeatCount),
+						_user$project$Election_Create$myStyle
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
@@ -8282,13 +8188,13 @@ var _user$project$Main$view = function (election) {
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[]),
-				A2(_elm_lang$core$List$map, _user$project$Main$renderCandidate, election.candidates)),
+				A2(_elm_lang$core$List$map, _user$project$Election_Create$renderCandidate, election.candidates)),
 				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$AddCandidate),
-						_user$project$Main$buttonStyle
+						_elm_lang$html$Html_Events$onClick(_user$project$Election_Messages$AddCandidate),
+						_user$project$Election_Create$buttonStyle
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -8298,8 +8204,8 @@ var _user$project$Main$view = function (election) {
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$CreateElection),
-						_user$project$Main$buttonStyle
+						_elm_lang$html$Html_Events$onClick(_user$project$Election_Messages$CreateElection),
+						_user$project$Election_Create$buttonStyle
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -8307,9 +8213,169 @@ var _user$project$Main$view = function (election) {
 					]))
 			]));
 };
+
+var _user$project$Election_Models$newCandidate = function (id) {
+	return {name: '', id: id};
+};
+var _user$project$Election_Models$newElection = {
+	candidates: _elm_lang$core$Native_List.fromArray(
+		[
+			_user$project$Election_Models$newCandidate(0)
+		]),
+	name: '',
+	seats: 1,
+	currentId: 0
+};
+var _user$project$Election_Models$Candidate = F2(
+	function (a, b) {
+		return {name: a, id: b};
+	});
+var _user$project$Election_Models$Election = F4(
+	function (a, b, c, d) {
+		return {candidates: a, name: b, seats: c, currentId: d};
+	});
+
+var _user$project$Election_Update$update = F2(
+	function (msg, election) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'NoOp':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					election,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'ElectionName':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						election,
+						{name: _p0._0}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'SeatCount':
+				var _p1 = _elm_lang$core$String$toInt(_p0._0);
+				if (_p1.ctor === 'Err') {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						election,
+						_elm_lang$core$Native_List.fromArray(
+							[]));
+				} else {
+					return A2(
+						_elm_lang$core$Platform_Cmd_ops['!'],
+						_elm_lang$core$Native_Utils.update(
+							election,
+							{seats: _p1._0}),
+						_elm_lang$core$Native_List.fromArray(
+							[]));
+				}
+			case 'EditCandidate':
+				var updateCandidate = function (c) {
+					return _elm_lang$core$Native_Utils.eq(c.id, _p0._0) ? _elm_lang$core$Native_Utils.update(
+						c,
+						{name: _p0._1}) : c;
+				};
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						election,
+						{
+							candidates: A2(_elm_lang$core$List$map, updateCandidate, election.candidates)
+						}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'AddCandidate':
+				var newId = election.currentId + 1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						election,
+						{
+							candidates: A2(
+								_elm_lang$core$List$append,
+								election.candidates,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_user$project$Election_Models$newCandidate(newId)
+									])),
+							currentId: newId
+						}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'CreateElection':
+				return {
+					ctor: '_Tuple2',
+					_0: election,
+					_1: _user$project$Election_Commands$createElection(election)
+				};
+			case 'CreateElectionSuccess':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					election,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					election,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+		}
+	});
+
+var _user$project$Messages$ElectionMsg = function (a) {
+	return {ctor: 'ElectionMsg', _0: a};
+};
+
+var _user$project$Models$initialModel = {election: _user$project$Election_Models$newElection};
+var _user$project$Models$Model = function (a) {
+	return {election: a};
+};
+
+var _user$project$View$page = function (model) {
+	return A2(
+		_elm_lang$html$Html_App$map,
+		_user$project$Messages$ElectionMsg,
+		_user$project$Election_Create$view(model.election));
+};
+var _user$project$View$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$View$page(model)
+			]));
+};
+
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		var _p1 = A2(_user$project$Election_Update$update, _p0._0, model.election);
+		var updatedElection = _p1._0;
+		var cmd = _p1._1;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{election: updatedElection}),
+			_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Messages$ElectionMsg, cmd)
+		};
+	});
+
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$init = A2(
+	_elm_lang$core$Platform_Cmd_ops['!'],
+	_user$project$Models$initialModel,
+	_elm_lang$core$Native_List.fromArray(
+		[]));
 var _user$project$Main$main = {
 	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})
+		{init: _user$project$Main$init, view: _user$project$View$view, update: _user$project$Update$update, subscriptions: _user$project$Main$subscriptions})
 };
 
 var Elm = {};
