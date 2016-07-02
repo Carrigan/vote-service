@@ -17,7 +17,7 @@ defmodule VoteService.PageController do
   end
 
   def render_vote(conn, params, %{status: "closed"}), do: results(conn, params)
-  def render_vote(conn, %{"id" => id}, _), do: render conn, "vote.html", vote_id: id
+  def render_vote(conn, _, election), do: render conn, "vote.html", election: election
 
   def results(conn, %{"id" => id}) do
     render conn, "results.html", election_id: id

@@ -13,6 +13,11 @@ p, a {
   font-size: 1.1em;
 }
 
+.invisilink, .invisilink:hover {
+  text-decoration: none;
+  color: #FFF;
+}
+
 .bold-button {
   margin-top: 20px;
   margin-bottom: 20px;

@@ -20,9 +20,13 @@
     <h3>Single Transferable Vote</h3>
     <p>
       Single transferable vote is a method of conducting an election that is used many places around
-      the world, including and even several places in the US. To learn more about the underlying
-      algorithm, you can watch the video below.
+      the world, including Ireland and several places in the US. In STV, you rank as many candidates
+      as you would like to on the ballot in your order of preference. In the event that your first
+      choice is unable to win, your vote is transfered to the next candidate on your ballot. In a
+      multi-seat election, if your first choice candidate wins and has more votes than needed, than
+      only a fraction of your vote is used to elect that candidate and the remainder trickles down.
     </p>
+    <p> A video demonstrating this process and why it is advantageous can be found below. </p>
 
     <iframe width="560" height="315" src="https://www.youtube.com/embed/l8XOZJkozfI" frameborder="0" allowfullscreen></iframe>
 
