@@ -1,5 +1,6 @@
 defmodule VoteService.Vote do
   use VoteService.Web, :model
+  alias VoteService.Repo
 
   schema "votes" do
     belongs_to :election, VoteService.Election
@@ -22,11 +23,30 @@ defmodule VoteService.Vote do
     |> cast(params, @required_fields, @optional_fields)
     |> cast_assoc(:vote_entries, required: true)
     |> validate_election_open(election)
+    |> validate_entries(election)
   end
 
-  def validate_election_open(changeset, %{status: "closed"}) do
+  defp validate_election_open(changeset, %{status: "closed"}) do
     add_error(changeset, :election, "closed")
   end
 
-  def validate_election_open(changeset, _), do: changeset
+  defp validate_election_open(changeset, _), do: changeset
+
+  defp validate_entries(changeset, election) do
+    get_change(changeset, :vote_entries)
+    |> Enum.reduce(changeset, fn(entry, changes) -> validate_entry(changes, election, entry) end)
+  end
+
+  defp validate_entry(changeset, election, entry) do
+    id = get_change(entry, :candidate_id)
+    valid_candidates = assoc(election, :candidates)
+    candidate = Repo.get(valid_candidates, id)
+    validate_candidate(changeset, candidate, id)
+  end
+
+  defp validate_candidate(changeset, nil, id) do
+    add_error(changeset, :vote_entries, "Candidate #{id} is not in this election")
+  end
+
+  defp validate_candidate(changeset, _, _), do: changeset
 end
