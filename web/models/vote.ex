@@ -21,5 +21,12 @@ defmodule VoteService.Vote do
     build_assoc(election, :votes)
     |> cast(params, @required_fields, @optional_fields)
     |> cast_assoc(:vote_entries, required: true)
+    |> validate_election_open(election)
   end
+
+  def validate_election_open(changeset, %{status: "closed"}) do
+    add_error(changeset, :election, "closed")
+  end
+
+  def validate_election_open(changeset, _), do: changeset
 end
