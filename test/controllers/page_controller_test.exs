@@ -21,6 +21,12 @@ defmodule VoteService.PageControllerTest do
     assert html_response(conn, 200) =~ "Open Ballot"
   end
 
+  test "GET /vote when the voting is done redirects", %{conn: conn, election: election} do
+    election = election |> VoteService.Election.close() |> Repo.update!()
+    conn = get conn, "/vote/#{election.id}"
+    assert html_response(conn, 200) =~ "Results"
+  end
+
   test "GET /results", %{conn: conn, election: election} do
     conn = get conn, "/results/#{election.id}"
     assert html_response(conn, 200) =~ "Open Ballot"

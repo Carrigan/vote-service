@@ -1,6 +1,8 @@
 defmodule VoteService.PageController do
   use VoteService.Web, :controller
 
+  alias VoteService.Election
+
   def index(conn, _params) do
     render conn, "index.html"
   end
@@ -9,9 +11,13 @@ defmodule VoteService.PageController do
     render conn, "new.html"
   end
 
-  def vote(conn, %{"id" => id}) do
-    render conn, "vote.html", vote_id: id
+  def vote(conn, params = %{"id" => id}) do
+    election = Repo.get(Election, id)
+    render_vote conn, params, election
   end
+
+  def render_vote(conn, params, %{status: "closed"}), do: results(conn, params)
+  def render_vote(conn, %{"id" => id}, _), do: render conn, "vote.html", vote_id: id
 
   def results(conn, %{"id" => id}) do
     render conn, "results.html", election_id: id
