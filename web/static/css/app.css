@@ -9,6 +9,15 @@ body, form, ul, table {
   margin-bottom: 20px;
 }
 
+p, a {
+  font-size: 1.1em;
+}
+
+.bold-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .tagline {
   line-height: 150%;
   margin-top: 20px;
@@ -28,12 +37,17 @@ body, form, ul, table {
 }
 
 .directions {
-  font-size: 1.1em;
   margin-bottom: 30px;
 }
 
 .button-row {
   margin-top: 30px;
+}
+
+.more-links {
+  margin-top: 50px;
+  padding-top: 10px;
+  border-top: 1px #CCC solid;
 }
 
 /* Phoenix flash messages */

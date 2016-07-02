@@ -15,10 +15,12 @@
       </div>
 
       <p class="directions">
-        This election is still going. The results will be displayed here when it has finished.
+        This election is still running, which means that the creator of this election has not
+        closed it out yet. If you leave this tab open, the results will be displayed when the
+        election is finished.
       </p>
 
-      <h4>Current vote count: <span id="vote_count"></span></h4>
+      <p class="directions">So far, there have been <span id="vote_count"></span> votes cast.</hp>
     </div>
   </div>
 </div>
@@ -27,6 +29,14 @@
   <h3>The Results Are In</h3>
   <h4>The winners are:</h4>
   <ul id="winners" class="list-group"></ul>
+</div>
+
+<div class="more-links">
+  <h4>Thank you for taking part in Democracy.</h4>
+  <p>Your visit does not have to end here! Please check out the links below to see what other
+     elections are currently happening or to create your own.</p>
+  <a href="/new" class="btn btn-primary">Create An Election</a>
+  <a href="/" class="btn btn-primary">Find Other Elections</a>
 </div>
 
 <script>

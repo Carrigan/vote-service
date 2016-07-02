@@ -12,8 +12,8 @@
     </p>
   </div>
 
-  <div class="col-md-4 col-md-offset-4">
-    <a href="/new" class="btn btn-block btn-primary">New Election</a>
+  <div class="bold-button col-md-6 col-md-offset-3">
+    <a href="/new" class="btn btn-lg btn-block btn-primary">New Election</a>
   </div><div class="col-md-4"></div>
 
   <div class="col-md-12">
