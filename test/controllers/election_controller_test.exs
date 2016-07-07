@@ -22,7 +22,10 @@ defmodule VoteService.ElectionControllerTest do
       "name" => election.name,
       "status" => election.status,
       "candidates" => [],
-      "close_url" => nil }
+      "close_url" => nil,
+      "created_at" => Ecto.DateTime.to_iso8601(election.inserted_at),
+      "seat_count" => election.seats,
+      "vote_count" => Election.vote_count(election) }
   end
 
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do
