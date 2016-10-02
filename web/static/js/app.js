@@ -19,6 +19,8 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+var node = document.getElementById('vote-box');
+if (node) Elm.Vote.embed(node);
 
 export var VoteApp = {
   get_election: function(election, success, failure) {

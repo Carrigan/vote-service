@@ -52,6 +52,12 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
+    },
+    elmBrunch: {
+      outputFolder: "web/static/vendor",
+      mainModules: [
+        "web/static/elm/Vote.elm"
+      ]
     }
   },
 

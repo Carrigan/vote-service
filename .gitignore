@@ -26,3 +26,4 @@ erl_crash.dump
 # Vagrant
 /.vagrant
 *.retry
+/elm-stuff

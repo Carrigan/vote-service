@@ -1,90 +1,18 @@
 <%= content_tag :div, id: "election",
   data: [id: @election.id] do %><% end %>
 
-<div id="vote-box">
+
+<div>
   <div class="row">
     <div class="col-lg-12">
       <h3><%= @election.name %></h3>
       <p class="directions">
-        To vote on this issue, drag as many candidates as you would like from the Candidates column
-        to the Ballot column and sort them in your order of preference. When you are finished, click
-        the Vote button below.
+        To vote on this issue, click on the candidates in the order you would like. Clicking on a
+        selected candidate will reset them. When you are finished, click the Vote button to submit
+        your ballot.
       </p>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-lg-5 col-lg-offset-1">
-      <h4 class="text-center">Candidates</h4>
-      <hr>
-      <ul id="candidates" class="list-group drop-zone connectedSortable"></ul>
-    </div>
-
-    <div class="col-lg-5">
-      <h4 class="text-center">Ballot</h4>
-      <hr>
-      <ul id="ballot" class="list-group drop-zone connectedSortable"></ul>
-    </div>
-  </div>
-
-  <div id="error-box" class="hidden">
-    <p>You must select at least one candidate to vote!</p>
-  </div>
-
-  <div class="row button-row">
-    <div class="col-lg-4 col-lg-offset-4"><button id="vote-button" class="btn btn-primary btn-block">Vote</button></div>
-  </div>
+  <div id="vote-box"></div>
 </div>
-
-<script>
-var app = require("web/static/js/app").VoteApp;
-var election_id = document.getElementById("election").getAttribute("data-id");
-
-if($.cookie('election_' + election_id)) {
-  window.location.href = "/results/" + election_id + "?fraud=true";
-}
-
-$(function() {
-  $( "#candidates, #ballot" ).sortable({
-    connectWith: ".connectedSortable",
-    start: function() {
-      $( "#candidates, #ballot" ).addClass("highlight-borders");
-    },
-
-    stop: function() {
-      $( "#candidates, #ballot" ).removeClass("highlight-borders");
-    }
-  }).disableSelection();
-});
-
-var success_handler = function(data) {
-  $.each(data.data.candidates, function(i, candidate) {
-    $('#candidates').append("<li id=candidate_" + candidate.id + " class='list-group-item'>" + candidate.name + "</li>");
-  });
-}
-
-var failure_handler = function(data) {
-  console.log("Replace this with a 404 please!");
-}
-
-var vote_success_handler = function() {
-  window.location.href = "/results/" + election_id + "?voted=true";
-}
-
-var vote_failure_handler = function() { }
-
-app.get_election(election_id, success_handler, failure_handler);
-
-$('#vote-button').click(function() {
-  var candidates = $.map($('#ballot li'), function(li) { return $(li).attr('id').split('_')[1]; });
-
-  if(candidates.length == 0) {
-    $('#error-box').removeClass('hidden');
-    return;
-  }
-
-  $.cookie('election_' + election_id, true);
-  app.cast_vote(election_id, candidates, vote_success_handler, vote_failure_handler);
-});
-
-</script>
