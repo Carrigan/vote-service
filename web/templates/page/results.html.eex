@@ -1,3 +1,5 @@
+<%= content_tag :div, id: "election-results", data: [id: @election_id] do %><% end %>
+
 <div id="still-going">
   <div class="row">
     <div class="col-lg-12">
@@ -38,67 +40,3 @@
   <a href="/new" class="btn btn-primary">Create An Election</a>
   <a href="/" class="btn btn-primary">Find Other Elections</a>
 </div>
-
-<script>
-var app = require("web/static/js/app").VoteApp;
-var election_id = <%= @election_id %>;
-
-var query_string = function () {
-  // This function is anonymous, is executed immediately and
-  // the return value is assigned to QueryString!
-  var query_string = {};
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
-    var pair = vars[i].split("=");
-        // If first entry with this name
-    if (typeof query_string[pair[0]] === "undefined") {
-      query_string[pair[0]] = decodeURIComponent(pair[1]);
-        // If second entry with this name
-    } else if (typeof query_string[pair[0]] === "string") {
-      var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
-      query_string[pair[0]] = arr;
-        // If third or later entry with this name
-    } else {
-      query_string[pair[0]].push(decodeURIComponent(pair[1]));
-    }
-  }
-  return query_string;
-}();
-
-if(query_string.voted) {
-  $('#thanks-for-voting').removeClass('hidden');
-}
-
-if(query_string.fraud) {
-  $('#voter-fraud').removeClass('hidden');
-}
-
-var request_results = function() {
-  app.get_election(election_id, success_handler, failure_handler);
-}
-
-var success_handler = function(data) {
-  if(data.data.status == "open") {
-    $('#vote_count').text(data.data.vote_count)
-    setTimeout(request_results, 5000);
-    return;
-  }
-
-  $('#results-box').removeClass('hidden');
-  $('#still-going').addClass('hidden');
-
-  $.each(data.data.candidates, function(i, candidate) {
-    if(candidate.winner) {
-      $('#winners').append("<li class='list-group-item'>" + candidate.name + "</li>");
-    }
-  });
-}
-
-var failure_handler = function(data) {
-  console.log("Replace this with a 404 please!");
-}
-
-request_results();
-
-</script>

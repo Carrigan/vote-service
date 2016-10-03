@@ -1,3 +1,5 @@
+<%= content_tag :div, id: "election-index" do %><% end %>
+
 <div class="row">
   <div class="col-md-12">
     <h3 class="tagline">Open Ballot is a JSON API for creating, managing, and voting in elections using the
@@ -44,21 +46,5 @@
 </div>
 
 <script>
-var app = require("web/static/js/app").VoteApp;
 
-var success_handler = function(data) {
-  if(data.data.length > 0) {
-    $('#election-box').removeClass('hidden');
-    $.each(data.data, function(i, entry) {
-      $('#current-elections').append("<tr><td><a href='/vote/" + entry.id +"'>" + entry.name +
-        "</a></td><td>" + entry.seat_count+ "</td><td>" + entry.created_at + "</td></tr>");
-    });
-  }
-}
-
-var failure_handler = function(data) {
-  console.log("Handle this.");
-}
-
-app.get_elections(success_handler, failure_handler);
 </script>

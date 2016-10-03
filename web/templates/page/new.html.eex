@@ -1,3 +1,5 @@
+<div id="create-new-election"></div>
+
 <div id="loading" class="hidden">
   <img src="http://reactiongifs.me/wp-content/uploads/2013/08/at-work-cookie-monster.gif">
 </div>
@@ -30,61 +32,3 @@
      election's results.</p>
   <button id='close-button' class="btn btn-primary">Close Election</button>
 </div>
-
-<script>
-var app = require("web/static/js/app").VoteApp;
-var close_link;
-var election_id;
-
-var close_success = function() {
-  window.location.href = "/results/" + election_id;
-}
-
-var close_failure = function() {
-  console.log("Add an error handler here please!");
-}
-
-$('#close-button').click(function() {
-  app.close_election(close_link, close_success, close_failure);
-});
-
-var success_handler = function(data) {
-  $('#loading').addClass('hidden');
-  $('#election_created').removeClass('hidden');
-
-  election_id = data.data.id;
-  close_link = data.data.close_url;
-  var election_link = '/vote/' + data.data.id;
-
-  $('#election-link').attr('href', election_link);
-  $('#election-link').text(election_link);
-}
-
-var failure_handler = function(data) {
-  $('#loading').addClass('hidden');
-  $('#create_new').removeClass('hidden');
-}
-
-var create_new_candidate = function() {
-  var container = $('#inputs_div');
-  container.append("<input type='text' class='form-control space-bottom'>");
-}
-
-create_new_candidate();
-
-$('#more_candidates').click(function() {
-  create_new_candidate();
-});
-
-$('#new_button').click(function() {
-  $('#create_new').addClass('hidden');
-  $('#election_created').addClass('hidden');
-  $('#loading').removeClass('hidden');
-
-  var name = $('#election_name').val();
-  var seats = $('#seat_count').val();
-  var candidates = $.map($('#inputs_div :input'), function(input) { return $(input).val() });
-  app.make_election(candidates, name, seats, success_handler, failure_handler);
-});
-
-</script>
