@@ -9048,21 +9048,26 @@ var _user$project$Vote$update = F2(
 		var _p6 = msg;
 		switch (_p6.ctor) {
 			case 'Select':
+				var candidates = model.candidates;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					A2(
-						_elm_lang$core$List$map,
-						A2(
-							_user$project$Vote$updateSelect,
-							_p6._0,
-							_user$project$Vote$highestRank(model)),
-						model),
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							candidates: A2(
+								_elm_lang$core$List$map,
+								A2(
+									_user$project$Vote$updateSelect,
+									_p6._0,
+									_user$project$Vote$highestRank(candidates)),
+								candidates)
+						}),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'FetchSucceed':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p6._0.data.candidates,
+					_p6._0.data,
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'FetchFail':
@@ -9072,10 +9077,10 @@ var _user$project$Vote$update = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'Vote':
-				return _user$project$Vote$enabled(model) ? {
+				return _user$project$Vote$enabled(model.candidates) ? {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: A4(_user$project$Commands$postVote, 48, model, _user$project$Vote$VoteFail, _user$project$Vote$VoteSucceed)
+					_1: A4(_user$project$Commands$postVote, model.id, model.candidates, _user$project$Vote$VoteFail, _user$project$Vote$VoteSucceed)
 				} : A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
@@ -9102,11 +9107,29 @@ var _user$project$Vote$FetchFail = function (a) {
 var _user$project$Vote$FetchSucceed = function (a) {
 	return {ctor: 'FetchSucceed', _0: a};
 };
-var _user$project$Vote$initialState = {
-	ctor: '_Tuple2',
-	_0: _elm_lang$core$Native_List.fromArray(
-		[]),
-	_1: A3(_user$project$Commands$fetchElection, 48, _user$project$Vote$FetchSucceed, _user$project$Vote$FetchFail)
+var _user$project$Vote$initialState = function (electionString) {
+	var _p7 = _elm_lang$core$String$toInt(electionString);
+	if (_p7.ctor === 'Ok') {
+		return {
+			ctor: '_Tuple2',
+			_0: {
+				id: 0,
+				candidates: _elm_lang$core$Native_List.fromArray(
+					[])
+			},
+			_1: A3(_user$project$Commands$fetchElection, _p7._0, _user$project$Vote$FetchSucceed, _user$project$Vote$FetchFail)
+		};
+	} else {
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			{
+				id: 0,
+				candidates: _elm_lang$core$Native_List.fromArray(
+					[])
+			},
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	}
 };
 var _user$project$Vote$Select = function (a) {
 	return {ctor: 'Select', _0: a};
@@ -9128,7 +9151,7 @@ var _user$project$Vote$renderCandidate = function (candidate) {
 };
 var _user$project$Vote$view = function (model) {
 	return _elm_lang$core$Native_Utils.eq(
-		model,
+		model.candidates,
 		_elm_lang$core$Native_List.fromArray(
 			[])) ? A2(
 		_elm_lang$html$Html$div,
@@ -9157,13 +9180,13 @@ var _user$project$Vote$view = function (model) {
 					[
 						_elm_lang$html$Html_Attributes$class('list-group')
 					]),
-				A2(_elm_lang$core$List$map, _user$project$Vote$renderCandidate, model)),
+				A2(_elm_lang$core$List$map, _user$project$Vote$renderCandidate, model.candidates)),
 				A2(
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html_Attributes$class(
-						_user$project$Vote$buttonClasses(model)),
+						_user$project$Vote$buttonClasses(model.candidates)),
 						_elm_lang$html$Html_Events$onClick(_user$project$Vote$Vote)
 					]),
 				_elm_lang$core$Native_List.fromArray(
@@ -9173,8 +9196,9 @@ var _user$project$Vote$view = function (model) {
 			]));
 };
 var _user$project$Vote$main = {
-	main: _elm_lang$html$Html_App$program(
-		{init: _user$project$Vote$initialState, view: _user$project$Vote$view, update: _user$project$Vote$update, subscriptions: _user$project$Vote$subscriptions})
+	main: _elm_lang$html$Html_App$programWithFlags(
+		{init: _user$project$Vote$initialState, view: _user$project$Vote$view, update: _user$project$Vote$update, subscriptions: _user$project$Vote$subscriptions}),
+	flags: _elm_lang$core$Json_Decode$string
 };
 
 var Elm = {};

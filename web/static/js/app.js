@@ -13,7 +13,7 @@ function initializeVoteApp() {
     return;
   }
 
-  var app = Elm.Vote.embed(votingNode);
+  var app = Elm.Vote.embed(votingNode, electionId);
 
   app.ports.voteComplete.subscribe(function() {
     $.cookie('election_' + electionId, true);

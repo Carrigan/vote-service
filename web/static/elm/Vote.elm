@@ -24,15 +24,19 @@ type Msg
   | VoteSucceed Int
   | VoteFail Http.Error
 
-initialState : ( List Candidate, Cmd Msg )
-initialState =
-  ([], fetchElection 48 FetchSucceed FetchFail)
+initialState : String -> ( Election, Cmd Msg )
+initialState electionString =
+  case String.toInt electionString of
+    Ok electionId ->
+      ({ id = 0, candidates = [] }, fetchElection electionId FetchSucceed FetchFail)
+    Err _ ->
+      { id = 0, candidates = [] } ! []
 
 subscriptions model =
     Sub.none
 
 main =
-    App.program
+    App.programWithFlags
         { init = initialState
         , view = view
         , update = update
@@ -78,21 +82,24 @@ updateSelect selected highest current =
 
 port voteComplete : Int -> Cmd msg
 
-update : Msg -> List Candidate -> ( List Candidate, Cmd Msg )
+update : Msg -> Election -> ( Election, Cmd Msg )
 update msg model =
   case msg of
     Select candidate ->
-      (List.map (updateSelect candidate (highestRank model)) model) ! []
+      let
+        candidates = model.candidates
+      in
+        { model | candidates = (List.map (updateSelect candidate (highestRank candidates)) candidates) } ! []
 
     FetchSucceed wrappedElection ->
-      wrappedElection.data.candidates ! []
+      wrappedElection.data ! []
 
     FetchFail error ->
       model ! []
 
     Vote ->
-      if (enabled model) then
-        (model, postVote 48 model VoteFail VoteSucceed)
+      if (enabled model.candidates) then
+        (model, postVote model.id model.candidates VoteFail VoteSucceed)
       else
         model ! []
 
@@ -127,11 +134,11 @@ buttonClasses candidates =
       String.join " " withDisabled |> String.trim
 
 view model =
-  if model == [] then
+  if model.candidates == [] then
     div [] [text "Loading election..."]
   else
     div []
       [ h3 [] [ text "Your Ballot" ]
-      , ul [ class "list-group" ] (List.map renderCandidate model)
-      , button [ class (buttonClasses model), onClick Vote ] [ text "Vote" ]
+      , ul [ class "list-group" ] (List.map renderCandidate model.candidates)
+      , button [ class (buttonClasses model.candidates), onClick Vote ] [ text "Vote" ]
       ]
