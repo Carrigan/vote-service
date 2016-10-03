@@ -1,4 +1,4 @@
-module Vote exposing (main)
+port module Vote exposing (..)
 
 import Http
 import Html exposing (Html, button, div, text, h3, ul, li, span)
@@ -69,6 +69,8 @@ updateSelect selected highest current =
             else
               current
 
+port voteComplete : Int -> Cmd msg
+
 update : Msg -> List Candidate -> ( List Candidate, Cmd Msg )
 update msg model =
   case msg of
@@ -85,7 +87,7 @@ update msg model =
       (model, postVote 48 model VoteFail VoteSucceed)
 
     VoteSucceed voteId ->
-      model ! []
+      (model, voteComplete 0)
 
     VoteFail error ->
       model ! []

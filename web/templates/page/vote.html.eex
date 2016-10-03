@@ -14,5 +14,8 @@
     </div>
   </div>
 
+  <%= content_tag :div, id: "election", data: [id: @election.id] do %> 
+  <% end %>
+
   <div id="vote-box"></div>
 </div>

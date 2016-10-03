@@ -20,7 +20,24 @@ import "phoenix_html"
 
 // import socket from "./socket"
 var node = document.getElementById('vote-box');
-if (node) Elm.Vote.embed(node);
+let election = document.getElementById("election");
+
+function initializeVoteApp() {
+  let electionId = election.getAttribute("election-id")
+  if($.cookie('election_' + electionId)) {
+    window.location.href = "/results/" + electionId + "?fraud=true";
+    return;
+  }
+
+  var app = Elm.Vote.embed(node);
+
+  app.ports.voteComplete.subscribe(function() {
+    $.cookie('election_' + electionId, true);
+    window.location.href = "/results/" + electionId + "?voted=true";
+  });
+}
+
+if (node) initializeVoteApp();
 
 export var VoteApp = {
   get_election: function(election, success, failure) {

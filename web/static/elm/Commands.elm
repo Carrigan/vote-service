@@ -9,7 +9,6 @@ import Json.Decode exposing (Decoder, list, at)
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
 import Json.Encode as Encode
 import Json.Encode exposing (encode, object, array)
-
 import Task
 
 fetchElection id success failure =

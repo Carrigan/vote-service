@@ -9012,6 +9012,11 @@ var _user$project$Vote$highestRank = function (candidates) {
 var _user$project$Vote$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$Vote$voteComplete = _elm_lang$core$Native_Platform.outgoingPort(
+	'voteComplete',
+	function (v) {
+		return v;
+	});
 var _user$project$Vote$VoteFail = function (a) {
 	return {ctor: 'VoteFail', _0: a};
 };
@@ -9053,11 +9058,11 @@ var _user$project$Vote$update = F2(
 					_1: A4(_user$project$Commands$postVote, 48, model, _user$project$Vote$VoteFail, _user$project$Vote$VoteSucceed)
 				};
 			case 'VoteSucceed':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					_elm_lang$core$Native_List.fromArray(
-						[]));
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Vote$voteComplete(0)
+				};
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
