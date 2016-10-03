@@ -9012,6 +9012,26 @@ var _user$project$Vote$highestRank = function (candidates) {
 var _user$project$Vote$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$Vote$hasVote = function (candidate) {
+	return _elm_lang$core$Native_Utils.cmp(
+		A2(_elm_lang$core$Maybe$withDefault, 0, candidate.rank),
+		0) > 0;
+};
+var _user$project$Vote$enabled = function (candidates) {
+	return A2(_elm_lang$core$List$any, _user$project$Vote$hasVote, candidates);
+};
+var _user$project$Vote$buttonClasses = function (candidates) {
+	var baseClasses = _elm_lang$core$Native_List.fromArray(
+		['btn', 'btn-primary', 'btn-block']);
+	var withDisabled = A2(
+		_elm_lang$core$List$append,
+		baseClasses,
+		_elm_lang$core$Native_List.fromArray(
+			['disabled']));
+	return _user$project$Vote$enabled(candidates) ? _elm_lang$core$String$trim(
+		A2(_elm_lang$core$String$join, ' ', baseClasses)) : _elm_lang$core$String$trim(
+		A2(_elm_lang$core$String$join, ' ', withDisabled));
+};
 var _user$project$Vote$voteComplete = _elm_lang$core$Native_Platform.outgoingPort(
 	'voteComplete',
 	function (v) {
@@ -9052,11 +9072,15 @@ var _user$project$Vote$update = F2(
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'Vote':
-				return {
+				return _user$project$Vote$enabled(model) ? {
 					ctor: '_Tuple2',
 					_0: model,
 					_1: A4(_user$project$Commands$postVote, 48, model, _user$project$Vote$VoteFail, _user$project$Vote$VoteSucceed)
-				};
+				} : A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'VoteSucceed':
 				return {
 					ctor: '_Tuple2',
@@ -9103,7 +9127,17 @@ var _user$project$Vote$renderCandidate = function (candidate) {
 			]));
 };
 var _user$project$Vote$view = function (model) {
-	return A2(
+	return _elm_lang$core$Native_Utils.eq(
+		model,
+		_elm_lang$core$Native_List.fromArray(
+			[])) ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Loading election...')
+			])) : A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[]),
@@ -9128,7 +9162,8 @@ var _user$project$Vote$view = function (model) {
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('btn btn-primary btn-block'),
+						_elm_lang$html$Html_Attributes$class(
+						_user$project$Vote$buttonClasses(model)),
 						_elm_lang$html$Html_Events$onClick(_user$project$Vote$Vote)
 					]),
 				_elm_lang$core$Native_List.fromArray(
