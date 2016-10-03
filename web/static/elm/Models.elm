@@ -9,6 +9,7 @@ type alias Candidate =
 
 type alias Election =
   { candidates : List Candidate
+  , id : Int
   }
 
 type alias ElectionWrapped =

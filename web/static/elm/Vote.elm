@@ -6,13 +6,16 @@ import Html.App as App
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
 
-import Commands exposing (fetchElection)
+import Commands exposing (fetchElection, postVote)
 import Models exposing (..)
 
 type Msg
   = Select Candidate
   | FetchSucceed ElectionWrapped
   | FetchFail Http.Error
+  | Vote
+  | VoteSucceed Int
+  | VoteFail Http.Error
 
 initialState : ( List Candidate, Cmd Msg )
 initialState =
@@ -78,6 +81,15 @@ update msg model =
     FetchFail error ->
       model ! []
 
+    Vote ->
+      (model, postVote 48 model VoteFail VoteSucceed)
+
+    VoteSucceed voteId ->
+      model ! []
+
+    VoteFail error ->
+      model ! []
+
 renderBadge maybeRank =
   case maybeRank of
     Nothing ->
@@ -96,5 +108,5 @@ view model =
   div []
     [ h3 [] [ text "Your Ballot" ]
     , ul [ class "list-group" ] (List.map renderCandidate model)
-    , button [ class "btn btn-primary btn-block" ] [ text "Vote" ]
+    , button [ class "btn btn-primary btn-block", onClick Vote ] [ text "Vote" ]
     ]

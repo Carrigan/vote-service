@@ -8789,9 +8789,10 @@ var _user$project$Models$Candidate = F3(
 	function (a, b, c) {
 		return {id: a, name: b, rank: c};
 	});
-var _user$project$Models$Election = function (a) {
-	return {candidates: a};
-};
+var _user$project$Models$Election = F2(
+	function (a, b) {
+		return {candidates: a, id: b};
+	});
 var _user$project$Models$ElectionWrapped = function (a) {
 	return {data: a};
 };
@@ -8810,14 +8811,112 @@ var _user$project$Commands$candidateDecoder = A2(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Candidate))));
 var _user$project$Commands$electionDecoder = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'candidates',
-	_elm_lang$core$Json_Decode$list(_user$project$Commands$candidateDecoder),
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Election));
+	'id',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'candidates',
+		_elm_lang$core$Json_Decode$list(_user$project$Commands$candidateDecoder),
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Election)));
 var _user$project$Commands$electionWrappedDecoder = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'data',
 	_user$project$Commands$electionDecoder,
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$ElectionWrapped));
+var _user$project$Commands$voteId = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['data', 'id']),
+	_elm_lang$core$Json_Decode$int);
+var _user$project$Commands$voteUrl = function (id) {
+	return A2(
+		_elm_lang$core$String$join,
+		'/',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				'/api',
+				'elections',
+				_elm_lang$core$Basics$toString(id),
+				'votes'
+			]));
+};
+var _user$project$Commands$isVotedFor = function (candidate) {
+	var _p0 = candidate.rank;
+	if (_p0.ctor === 'Just') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var _user$project$Commands$voteEntry = function (candidate) {
+	return _elm_lang$core$Json_Encode$object(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 'candidate_id',
+				_1: _elm_lang$core$Json_Encode$int(candidate.id)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 'rank',
+				_1: _elm_lang$core$Json_Encode$int(
+					A2(_elm_lang$core$Maybe$withDefault, 0, candidate.rank))
+			}
+			]));
+};
+var _user$project$Commands$voteEntries = function (candidates) {
+	return A2(
+		_elm_lang$core$List$map,
+		_user$project$Commands$voteEntry,
+		A2(_elm_lang$core$List$filter, _user$project$Commands$isVotedFor, candidates));
+};
+var _user$project$Commands$vote = function (candidates) {
+	return _elm_lang$core$Json_Encode$object(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 'vote',
+				_1: _elm_lang$core$Json_Encode$object(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{
+							ctor: '_Tuple2',
+							_0: 'vote_entries',
+							_1: _elm_lang$core$Json_Encode$list(
+								_user$project$Commands$voteEntries(candidates))
+						}
+						]))
+			}
+			]));
+};
+var _user$project$Commands$postVote = F4(
+	function (id, candidates, failure, success) {
+		return A3(
+			_elm_lang$core$Task$perform,
+			failure,
+			success,
+			A2(
+				_evancz$elm_http$Http$fromJson,
+				_user$project$Commands$voteId,
+				A2(
+					_evancz$elm_http$Http$send,
+					_evancz$elm_http$Http$defaultSettings,
+					{
+						verb: 'POST',
+						headers: _elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'Content-Type', _1: 'application/json'}
+							]),
+						url: _user$project$Commands$voteUrl(id),
+						body: _evancz$elm_http$Http$string(
+							A2(
+								_elm_lang$core$Json_Encode$encode,
+								0,
+								_user$project$Commands$vote(candidates)))
+					})));
+	});
 var _user$project$Commands$fetchAllUrl = function (id) {
 	return A2(
 		_elm_lang$core$String$join,
@@ -8910,6 +9009,15 @@ var _user$project$Vote$replaceHigherRank = F2(
 var _user$project$Vote$highestRank = function (candidates) {
 	return A3(_elm_lang$core$List$foldl, _user$project$Vote$replaceHigherRank, 0, candidates);
 };
+var _user$project$Vote$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Vote$VoteFail = function (a) {
+	return {ctor: 'VoteFail', _0: a};
+};
+var _user$project$Vote$VoteSucceed = function (a) {
+	return {ctor: 'VoteSucceed', _0: a};
+};
 var _user$project$Vote$update = F2(
 	function (msg, model) {
 		var _p6 = msg;
@@ -8932,6 +9040,24 @@ var _user$project$Vote$update = F2(
 					_p6._0.data.candidates,
 					_elm_lang$core$Native_List.fromArray(
 						[]));
+			case 'FetchFail':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'Vote':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A4(_user$project$Commands$postVote, 48, model, _user$project$Vote$VoteFail, _user$project$Vote$VoteSucceed)
+				};
+			case 'VoteSucceed':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -8940,9 +9066,7 @@ var _user$project$Vote$update = F2(
 						[]));
 		}
 	});
-var _user$project$Vote$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
+var _user$project$Vote$Vote = {ctor: 'Vote'};
 var _user$project$Vote$FetchFail = function (a) {
 	return {ctor: 'FetchFail', _0: a};
 };
@@ -8999,7 +9123,8 @@ var _user$project$Vote$view = function (model) {
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('btn btn-primary btn-block')
+						_elm_lang$html$Html_Attributes$class('btn btn-primary btn-block'),
+						_elm_lang$html$Html_Events$onClick(_user$project$Vote$Vote)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[

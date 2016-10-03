@@ -9,7 +9,6 @@
   "homepage": "",
   "dependencies": {
     "jquery.cookie": "jquery-cookie#^1.4.1",
-    "jquery": "2.2.2",
-    "jquery-ui": "1.11.4"
+    "jquery": "2.2.2"
   }
 }
