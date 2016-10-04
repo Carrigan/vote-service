@@ -10,30 +10,15 @@ import String
 import Commands exposing (fetchElection, postVote)
 import Models exposing (..)
 
-hasVote candidate =
-  ((Maybe.withDefault 0 candidate.rank) > 0)
-
-enabled candidates =
-  List.any hasVote candidates
-
 type Msg
   = Select Candidate
-  | FetchSucceed ElectionWrapped
-  | FetchFail Http.Error
   | Vote
-  | VoteSucceed Int
-  | VoteFail Http.Error
+  | FetchElectionSuccess ElectionWrapped
+  | FetchElectionFailure Http.Error
+  | VotePostSuccess Int
+  | VotePostFailure Http.Error
 
-initialState : String -> ( Election, Cmd Msg )
-initialState electionString =
-  case String.toInt electionString of
-    Ok electionId ->
-      ({ id = 0, candidates = [] }, fetchElection electionId FetchSucceed FetchFail)
-    Err _ ->
-      { id = 0, candidates = [] } ! []
-
-subscriptions model =
-    Sub.none
+-- Main Application --
 
 main =
     App.programWithFlags
@@ -43,6 +28,54 @@ main =
         , subscriptions = subscriptions
         }
 
+port voteComplete : Int -> Cmd msg
+
+
+-- Initialization --
+
+initialState : String -> ( Election, Cmd Msg )
+initialState electionString =
+  case String.toInt electionString of
+    Ok electionId ->
+      ({ id = 0, candidates = [] }, fetchElection electionId FetchElectionSuccess FetchElectionFailure)
+    Err _ ->
+      { id = 0, candidates = [] } ! []
+
+-- Subscriptions --
+
+subscriptions model =
+    Sub.none
+
+-- Update State --
+
+update : Msg -> Election -> ( Election, Cmd Msg )
+update msg model =
+  case msg of
+    Select candidate ->
+      let
+        candidates = model.candidates
+      in
+        { model | candidates = (List.map (updateSelect candidate (highestRank candidates)) candidates) } ! []
+
+    Vote ->
+      if (enabled model.candidates) then
+        (model, postVote model.id model.candidates VotePostFailure VotePostSuccess)
+      else
+        model ! []
+
+    FetchElectionSuccess wrappedElection ->
+      wrappedElection.data ! []
+
+    FetchElectionFailure error ->
+      model ! []
+
+    VotePostSuccess voteId ->
+      (model, voteComplete 0)
+
+    VotePostFailure error ->
+      model ! []
+
+replaceHigherRank : Candidate -> Int -> Int
 replaceHigherRank candidate highest =
   case candidate.rank of
     Nothing ->
@@ -80,35 +113,28 @@ updateSelect selected highest current =
             else
               current
 
-port voteComplete : Int -> Cmd msg
+hasVote : Candidate -> Bool
+hasVote candidate =
+  ((Maybe.withDefault 0 candidate.rank) > 0)
 
-update : Msg -> Election -> ( Election, Cmd Msg )
-update msg model =
-  case msg of
-    Select candidate ->
-      let
-        candidates = model.candidates
-      in
-        { model | candidates = (List.map (updateSelect candidate (highestRank candidates)) candidates) } ! []
+enabled : List Candidate -> Bool
+enabled candidates =
+  List.any hasVote candidates
 
-    FetchSucceed wrappedElection ->
-      wrappedElection.data ! []
+-- Render State --
 
-    FetchFail error ->
-      model ! []
+view : Election -> Html Msg
+view election =
+  if election.candidates == [] then
+    div [] [text "Loading election..."]
+  else
+    div []
+      [ h3 [] [ text "Your Ballot" ]
+      , ul [ class "list-group" ] (List.map renderCandidate election.candidates)
+      , button [ class (buttonClasses election.candidates), onClick Vote ] [ text "Vote" ]
+      ]
 
-    Vote ->
-      if (enabled model.candidates) then
-        (model, postVote model.id model.candidates VoteFail VoteSucceed)
-      else
-        model ! []
-
-    VoteSucceed voteId ->
-      (model, voteComplete 0)
-
-    VoteFail error ->
-      model ! []
-
+renderBadge : Maybe Int -> Html Msg
 renderBadge maybeRank =
   case maybeRank of
     Nothing ->
@@ -123,6 +149,7 @@ renderCandidate candidate =
     , text candidate.name
     ]
 
+
 buttonClasses candidates =
   let
     baseClasses = ["btn", "btn-primary", "btn-block"]
@@ -132,13 +159,3 @@ buttonClasses candidates =
       String.join " " baseClasses |> String.trim
     else
       String.join " " withDisabled |> String.trim
-
-view model =
-  if model.candidates == [] then
-    div [] [text "Loading election..."]
-  else
-    div []
-      [ h3 [] [ text "Your Ballot" ]
-      , ul [ class "list-group" ] (List.map renderCandidate model.candidates)
-      , button [ class (buttonClasses model.candidates), onClick Vote ] [ text "Vote" ]
-      ]

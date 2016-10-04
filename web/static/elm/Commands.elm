@@ -11,52 +11,14 @@ import Json.Encode as Encode
 import Json.Encode exposing (encode, object, array)
 import Task
 
+-- GET /api/elections/:id --
+
 fetchElection id success failure =
-  Http.get electionWrappedDecoder (fetchAllUrl id)
+  Http.get electionWrappedDecoder (fetchElectionUrl id)
     |> Task.perform failure success
 
-fetchAllUrl id =
+fetchElectionUrl id =
   String.join "/" ["/api", "elections", (toString id)]
-
-voteEntry candidate =
-  object
-    [ ("candidate_id", Encode.int candidate.id)
-    , ("rank", Encode.int (Maybe.withDefault 0 candidate.rank))
-    ]
-
-isVotedFor candidate =
-  case candidate.rank of
-    Just x ->
-      True
-    Nothing ->
-      False
-
-voteEntries candidates =
-  List.filter isVotedFor candidates
-    |> List.map voteEntry
-
-vote candidates =
-    Encode.object
-      [ ("vote", Encode.object
-          [ ("vote_entries", Encode.list (voteEntries candidates)) ]
-        )
-      ]
-
-postVote id candidates failure success =
-  Http.send Http.defaultSettings
-    { verb = "POST"
-    , headers = [ ( "Content-Type", "application/json" ) ]
-    , url = voteUrl id
-    , body = candidates |> vote |> (encode 0) |> Http.string
-    }
-    |> Http.fromJson voteId
-    |> Task.perform failure success
-
-voteUrl id =
-  String.join "/" ["/api", "elections", (toString id), "votes"]
-
-voteId =
-  Decode.at ["data", "id"] Decode.int
 
 electionWrappedDecoder =
   decode ElectionWrapped
@@ -72,3 +34,48 @@ candidateDecoder =
     |> required "id" Decode.int
     |> required "name" Decode.string
     |> hardcoded Nothing
+
+-- POST /api/elections --
+
+postVote id candidates failure success =
+  Http.send Http.defaultSettings
+    { verb = "POST"
+    , headers = [ ( "Content-Type", "application/json" ) ]
+    , url = voteUrl id
+    , body = candidates |> voteObject |> (encode 0) |> Http.string
+    }
+    |> Http.fromJson voteIdDecoder
+    |> Task.perform failure success
+
+
+voteUrl id =
+  String.join "/" ["/api", "elections", (toString id), "votes"]
+
+voteIdDecoder =
+  Decode.at ["data", "id"] Decode.int
+
+voteObject candidates =
+    Encode.object
+      [ ("vote", Encode.object
+          [
+            ("vote_entries", Encode.list (voteEntries candidates))
+          ]
+        )
+      ]
+
+voteEntries candidates =
+  List.filter isVotedFor candidates
+    |> List.map voteEntry
+
+isVotedFor candidate =
+  case candidate.rank of
+    Just x ->
+      True
+    Nothing ->
+      False
+
+voteEntry candidate =
+  object
+    [ ("candidate_id", Encode.int candidate.id)
+    , ("rank", Encode.int (Maybe.withDefault 0 candidate.rank))
+    ]
