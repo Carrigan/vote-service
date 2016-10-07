@@ -10,6 +10,13 @@ type alias Candidate =
 type alias Election =
   { candidates : List Candidate
   , id : Int
+  , name : String
+  , seat_count : Int
+  , created_at : String
+  }
+
+type alias ElectionList =
+  { data : List Election
   }
 
 type alias ElectionWrapped =

@@ -1,5 +1,3 @@
-<%= content_tag :div, id: "election-index" do %><% end %>
-
 <div class="row">
   <div class="col-md-12">
     <h3 class="tagline">Open Ballot is a JSON API for creating, managing, and voting in elections using the
@@ -36,15 +34,5 @@
     <p>Documentation for the API is coming soon.</p>
   </div>
 
-  <div class="col-md-12 hidden" id='election-box'>
-    <h3>Elections Happening Now</h3>
-
-    <table class="table" id="current-elections">
-      <tr><th>Election Name</th><th># Seats</th><th>Created</th></tr>
-    </table>
-  </div>
+  <div id='election-index'></div>
 </div>
-
-<script>
-
-</script>

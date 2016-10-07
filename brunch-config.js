@@ -56,7 +56,8 @@ exports.config = {
     elmBrunch: {
       outputFolder: "web/static/vendor",
       mainModules: [
-        "web/static/elm/Vote.elm"
+        "web/static/elm/Vote.elm",
+        "web/static/elm/Index.elm"
       ]
     }
   },

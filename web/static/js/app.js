@@ -51,36 +51,10 @@ const app = {
     })
   },
 
-  cast_vote: function(election_id, candidate_ids, success, failure) {
-    var entries = $.map(candidate_ids, function(c_id, i) {
-      return { candidate_id: c_id, rank: i };
-    });
-
-    $.ajax({
-      type: "POST",
-      url: "/api/elections/" + election_id + "/votes",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify({vote: {vote_entries: entries}}),
-      dataType: "json",
-      success: success,
-      error: failure
-    })
-  },
-
   close_election: function(election_close_url, success, failure) {
     $.ajax({
       type: "GET",
       url: "/api/close_poll/" + election_close_url,
-      contentType: "application/json; charset=utf-8",
-      success: success,
-      error: failure
-    });
-  },
-
-  get_elections: function(success, failure) {
-    $.ajax({
-      type: "GET",
-      url: "/api/elections",
       contentType: "application/json; charset=utf-8",
       success: success,
       error: failure
@@ -223,21 +197,4 @@ if (election) {
 ///////////
 
 election = document.getElementById("election-index");
-
-if (election) {
-  var success_handler = function(data) {
-    if(data.data.length > 0) {
-      $('#election-box').removeClass('hidden');
-      $.each(data.data, function(i, entry) {
-        $('#current-elections').append("<tr><td><a href='/vote/" + entry.id +"'>" + entry.name +
-          "</a></td><td>" + entry.seat_count+ "</td><td>" + entry.created_at + "</td></tr>");
-      });
-    }
-  }
-
-  var failure_handler = function(data) {
-    console.log("Handle this.");
-  }
-
-  app.get_elections(success_handler, failure_handler);
-}
+if (election) Elm.Index.embed(election);

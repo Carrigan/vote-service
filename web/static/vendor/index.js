@@ -8975,230 +8975,112 @@ var _user$project$Commands$fetchElections = F2(
 			A2(_evancz$elm_http$Http$get, _user$project$Commands$electionListDecoder, _user$project$Commands$fetchElectionsUrl));
 	});
 
-var _user$project$Vote$renderBadge = function (maybeRank) {
-	var _p0 = maybeRank;
-	if (_p0.ctor === 'Nothing') {
-		return A2(
-			_elm_lang$html$Html$span,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$class('badge')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text('')
-				]));
-	} else {
-		return A2(
-			_elm_lang$html$Html$span,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$class('badge badge-primary')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text(
-					_elm_lang$core$Basics$toString(_p0._0))
-				]));
-	}
-};
-var _user$project$Vote$hasVote = function (candidate) {
-	return _elm_lang$core$Native_Utils.cmp(
-		A2(_elm_lang$core$Maybe$withDefault, 0, candidate.rank),
-		0) > 0;
-};
-var _user$project$Vote$enabled = function (candidates) {
-	return A2(_elm_lang$core$List$any, _user$project$Vote$hasVote, candidates);
-};
-var _user$project$Vote$buttonClasses = function (candidates) {
-	var baseClasses = _elm_lang$core$Native_List.fromArray(
-		['btn', 'btn-primary', 'btn-block']);
-	var withDisabled = A2(
-		_elm_lang$core$List$append,
-		baseClasses,
+var _user$project$Index$renderEmptyView = A2(
+	_elm_lang$html$Html$div,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('col-md-12')
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html$text('Loading Elections...')
+		]));
+var _user$project$Index$buildRow = function (election) {
+	var electionUrl = A2(
+		_elm_lang$core$String$join,
+		'/',
 		_elm_lang$core$Native_List.fromArray(
-			['disabled']));
-	return _user$project$Vote$enabled(candidates) ? _elm_lang$core$String$trim(
-		A2(_elm_lang$core$String$join, ' ', baseClasses)) : _elm_lang$core$String$trim(
-		A2(_elm_lang$core$String$join, ' ', withDisabled));
-};
-var _user$project$Vote$updateSelect = F3(
-	function (selected, highest, current) {
-		var _p1 = selected.rank;
-		if (_p1.ctor === 'Nothing') {
-			return _elm_lang$core$Native_Utils.eq(selected.id, current.id) ? _elm_lang$core$Native_Utils.update(
-				current,
-				{
-					rank: _elm_lang$core$Maybe$Just(highest + 1)
-				}) : current;
-		} else {
-			if (_elm_lang$core$Native_Utils.eq(selected.id, current.id)) {
-				return _elm_lang$core$Native_Utils.update(
-					current,
-					{rank: _elm_lang$core$Maybe$Nothing});
-			} else {
-				var _p2 = current.rank;
-				if (_p2.ctor === 'Nothing') {
-					return current;
-				} else {
-					var _p3 = _p2._0;
-					return (_elm_lang$core$Native_Utils.cmp(_p3, _p1._0) > 0) ? _elm_lang$core$Native_Utils.update(
-						current,
-						{
-							rank: _elm_lang$core$Maybe$Just(_p3 - 1)
-						}) : current;
-				}
-			}
-		}
-	});
-var _user$project$Vote$replaceHigherRank = F2(
-	function (candidate, highest) {
-		var _p4 = candidate.rank;
-		if (_p4.ctor === 'Nothing') {
-			return highest;
-		} else {
-			var _p5 = _p4._0;
-			return (_elm_lang$core$Native_Utils.cmp(_p5, highest) > 0) ? _p5 : highest;
-		}
-	});
-var _user$project$Vote$highestRank = function (candidates) {
-	return A3(_elm_lang$core$List$foldl, _user$project$Vote$replaceHigherRank, 0, candidates);
-};
-var _user$project$Vote$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
-var _user$project$Vote$voteComplete = _elm_lang$core$Native_Platform.outgoingPort(
-	'voteComplete',
-	function (v) {
-		return v;
-	});
-var _user$project$Vote$VotePostFailure = function (a) {
-	return {ctor: 'VotePostFailure', _0: a};
-};
-var _user$project$Vote$VotePostSuccess = function (a) {
-	return {ctor: 'VotePostSuccess', _0: a};
-};
-var _user$project$Vote$update = F2(
-	function (msg, model) {
-		var _p6 = msg;
-		switch (_p6.ctor) {
-			case 'Select':
-				var candidates = model.candidates;
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							candidates: A2(
-								_elm_lang$core$List$map,
-								A2(
-									_user$project$Vote$updateSelect,
-									_p6._0,
-									_user$project$Vote$highestRank(candidates)),
-								candidates)
-						}),
-					_elm_lang$core$Native_List.fromArray(
-						[]));
-			case 'Vote':
-				return _user$project$Vote$enabled(model.candidates) ? {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: A4(_user$project$Commands$postVote, model.id, model.candidates, _user$project$Vote$VotePostFailure, _user$project$Vote$VotePostSuccess)
-				} : A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					_elm_lang$core$Native_List.fromArray(
-						[]));
-			case 'FetchElectionSuccess':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_p6._0.data,
-					_elm_lang$core$Native_List.fromArray(
-						[]));
-			case 'FetchElectionFailure':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					_elm_lang$core$Native_List.fromArray(
-						[]));
-			case 'VotePostSuccess':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$Vote$voteComplete(0)
-				};
-			default:
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					model,
-					_elm_lang$core$Native_List.fromArray(
-						[]));
-		}
-	});
-var _user$project$Vote$FetchElectionFailure = function (a) {
-	return {ctor: 'FetchElectionFailure', _0: a};
-};
-var _user$project$Vote$FetchElectionSuccess = function (a) {
-	return {ctor: 'FetchElectionSuccess', _0: a};
-};
-var _user$project$Vote$initialState = function (electionString) {
-	var _p7 = _elm_lang$core$String$toInt(electionString);
-	if (_p7.ctor === 'Ok') {
-		return {
-			ctor: '_Tuple2',
-			_0: {
-				id: 0,
-				candidates: _elm_lang$core$Native_List.fromArray(
-					[])
-			},
-			_1: A3(_user$project$Commands$fetchElection, _p7._0, _user$project$Vote$FetchElectionSuccess, _user$project$Vote$FetchElectionFailure)
-		};
-	} else {
-		return A2(
-			_elm_lang$core$Platform_Cmd_ops['!'],
-			{
-				id: 0,
-				candidates: _elm_lang$core$Native_List.fromArray(
-					[])
-			},
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	}
-};
-var _user$project$Vote$Vote = {ctor: 'Vote'};
-var _user$project$Vote$Select = function (a) {
-	return {ctor: 'Select', _0: a};
-};
-var _user$project$Vote$renderCandidate = function (candidate) {
+			[
+				'',
+				'vote',
+				_elm_lang$core$Basics$toString(election.id)
+			]));
 	return A2(
-		_elm_lang$html$Html$li,
+		_elm_lang$html$Html$tr,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('list-group-item'),
-				_elm_lang$html$Html_Events$onClick(
-				_user$project$Vote$Select(candidate))
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_user$project$Vote$renderBadge(candidate.rank),
-				_elm_lang$html$Html$text(candidate.name)
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$a,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$href(electionUrl)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(election.name)
+							]))
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(election.seat_count))
+					])),
+				A2(
+				_elm_lang$html$Html$td,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(election.created_at)
+					]))
 			]));
 };
-var _user$project$Vote$view = function (election) {
-	return _elm_lang$core$Native_Utils.eq(
-		election.candidates,
-		_elm_lang$core$Native_List.fromArray(
-			[])) ? A2(
+var _user$project$Index$headerRow = A2(
+	_elm_lang$html$Html$tr,
+	_elm_lang$core$Native_List.fromArray(
+		[]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$th,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Election Name')
+				])),
+			A2(
+			_elm_lang$html$Html$th,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Seats')
+				])),
+			A2(
+			_elm_lang$html$Html$th,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Created')
+				]))
+		]));
+var _user$project$Index$buildTableRows = function (elections) {
+	return A2(
+		_elm_lang$core$List_ops['::'],
+		_user$project$Index$headerRow,
+		A2(_elm_lang$core$List$map, _user$project$Index$buildRow, elections));
+};
+var _user$project$Index$renderListView = function (elections) {
+	return A2(
 		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text('Loading election...')
-			])) : A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
+				_elm_lang$html$Html_Attributes$class('col-md-12')
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
@@ -9207,38 +9089,65 @@ var _user$project$Vote$view = function (election) {
 					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Your Ballot')
+						_elm_lang$html$Html$text('Elections Happening Now')
 					])),
 				A2(
-				_elm_lang$html$Html$ul,
+				_elm_lang$html$Html$table,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('list-group')
+						_elm_lang$html$Html_Attributes$class('table')
 					]),
-				A2(_elm_lang$core$List$map, _user$project$Vote$renderCandidate, election.candidates)),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class(
-						_user$project$Vote$buttonClasses(election.candidates)),
-						_elm_lang$html$Html_Events$onClick(_user$project$Vote$Vote)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Vote')
-					]))
+				_user$project$Index$buildTableRows(elections))
 			]));
 };
-var _user$project$Vote$main = {
-	main: _elm_lang$html$Html_App$programWithFlags(
-		{init: _user$project$Vote$initialState, view: _user$project$Vote$view, update: _user$project$Vote$update, subscriptions: _user$project$Vote$subscriptions}),
-	flags: _elm_lang$core$Json_Decode$string
+var _user$project$Index$view = function (elections) {
+	var _p0 = elections;
+	if (_p0.ctor === '[]') {
+		return _user$project$Index$renderEmptyView;
+	} else {
+		return _user$project$Index$renderListView(_p0);
+	}
+};
+var _user$project$Index$update = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		if (_p1.ctor === 'FetchElectionsSuccess') {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				_p1._0.data,
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		} else {
+			return A2(
+				_elm_lang$core$Platform_Cmd_ops['!'],
+				model,
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		}
+	});
+var _user$project$Index$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Index$FetchElectionsFailure = function (a) {
+	return {ctor: 'FetchElectionsFailure', _0: a};
+};
+var _user$project$Index$FetchElectionsSuccess = function (a) {
+	return {ctor: 'FetchElectionsSuccess', _0: a};
+};
+var _user$project$Index$initialState = {
+	ctor: '_Tuple2',
+	_0: _elm_lang$core$Native_List.fromArray(
+		[]),
+	_1: A2(_user$project$Commands$fetchElections, _user$project$Index$FetchElectionsSuccess, _user$project$Index$FetchElectionsFailure)
+};
+var _user$project$Index$main = {
+	main: _elm_lang$html$Html_App$program(
+		{init: _user$project$Index$initialState, view: _user$project$Index$view, update: _user$project$Index$update, subscriptions: _user$project$Index$subscriptions})
 };
 
 var Elm = {};
-Elm['Vote'] = Elm['Vote'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['Vote'], 'Vote', typeof _user$project$Vote$main === 'undefined' ? null : _user$project$Vote$main);
+Elm['Index'] = Elm['Index'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Index'], 'Index', typeof _user$project$Index$main === 'undefined' ? null : _user$project$Index$main);
 
 if (typeof define === "function" && define['amd'])
 {

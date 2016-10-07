@@ -11,14 +11,27 @@ import Json.Encode as Encode
 import Json.Encode exposing (encode, object, array)
 import Task
 
--- GET /api/elections/:id --
+-- GET /api/elections --
+
+fetchElections success failure =
+  Http.get electionListDecoder fetchElectionsUrl
+    |> Task.perform failure success
+
+fetchElectionsUrl =
+  String.join "/" [ "", "api", "elections" ]
+
+electionListDecoder =
+  decode ElectionList
+    |> required "data" (Decode.list electionDecoder)
+
+-- GET /api/election/:id
 
 fetchElection id success failure =
   Http.get electionWrappedDecoder (fetchElectionUrl id)
     |> Task.perform failure success
 
 fetchElectionUrl id =
-  String.join "/" ["/api", "elections", (toString id)]
+  String.join "/" ["", "api", "elections", (toString id)]
 
 electionWrappedDecoder =
   decode ElectionWrapped
@@ -28,6 +41,9 @@ electionDecoder =
   decode Election
     |> required "candidates" (Decode.list candidateDecoder)
     |> required "id" Decode.int
+    |> required "name" Decode.string
+    |> required "seat_count" Decode.int
+    |> required "created_at" Decode.string
 
 candidateDecoder =
   decode Candidate
@@ -49,7 +65,7 @@ postVote id candidates failure success =
 
 
 voteUrl id =
-  String.join "/" ["/api", "elections", (toString id), "votes"]
+  String.join "/" ["", "api", "elections", (toString id), "votes"]
 
 voteIdDecoder =
   Decode.at ["data", "id"] Decode.int
