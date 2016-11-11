@@ -34,5 +34,21 @@
     <p>Documentation for the API is coming soon.</p>
   </div>
 
-  <div id='election-index'></div>
+  <div id='election-index'>
+    <h3>Elections Happening Now</h3>
+    <table class="table">
+      <tr>
+        <th>Election Name</th>
+        <th>Seats</th>
+        <th>Created</th>
+      </tr>
+      <template v-for="election in elections">
+        <tr>
+          <td><a v-bind:href="renderElectionUrl(election.id)">{{election.name}}</a></td>
+          <td>{{election.seat_count}}</td>
+          <td>{{election.created_at}}</td>
+        </tr>
+      </template>
+    </table>
+  </div>
 </div>

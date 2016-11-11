@@ -1,7 +1,6 @@
 <%= content_tag :div, id: "election",
   data: [id: @election.id] do %><% end %>
 
-
 <div>
   <div class="row">
     <div class="col-lg-12">
