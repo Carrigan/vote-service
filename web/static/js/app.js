@@ -1,7 +1,10 @@
 import "phoenix_html"
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import VueCookie from 'vue-cookie'
+
 Vue.use(VueResource);
+Vue.use(VueCookie);
 
 let election = document.getElementById("election");
 
@@ -35,7 +38,11 @@ if (document.getElementById("ballot")) {
       currentRank: 0
     },
     methods: {
-      loadElection: function() {
+      initialize: function() {
+        if (this.$cookie.get('election-' + this.id) == 'voted') {
+          window.location.href = "/results/" + this.id + "?fraud=true";
+        }
+
         this.$http.get('/api/elections/' + this.id).then((response) => {
           let election = response.data.data;
           election.candidates.forEach(candidate => candidate.rank = null);
@@ -79,11 +86,12 @@ if (document.getElementById("ballot")) {
 
         let body = { vote: { vote_entries: entries } }
         this.$http.post('/api/elections/' + this.id + '/votes', body).then((response) => {
-          console.log(response);
+          this.$cookie.set('election-' + this.id, 'voted');
+          window.location.href = "/results/" + this.id + "?voted=true";
         });
       }
     }
   });
 
-  ballotApp.loadElection();
+  ballotApp.initialize();
 }
