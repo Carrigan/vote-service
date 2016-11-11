@@ -15,5 +15,22 @@
 
   <%= content_tag :div, id: "election", data: [id: @election.id] do %><% end %>
 
-  <div id="vote-box"></div>
+  <div id="ballot">
+    <div>
+      <h3>Your Ballot</h3>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          v-for="candidate in election.candidates"
+          v-on:click="selectCandidate(candidate)">
+          {{candidate.name}}
+          <span class="badge badge-primary">{{renderRank(candidate.rank)}}</span>
+        </li>
+      </ul>
+      <button
+        class="btn btn-primary btn-block"
+        v-on:click="submitVote">
+        Vote
+      </button>
+  </div>
 </div>
